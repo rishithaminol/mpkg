@@ -14,11 +14,11 @@
 #include "utils.h"	/* MAX_READ_BUFF */
 
 #ifdef DEBUG___
-#define NODE_PRINT(X)	\
-	printf("%s\n", (X)->ar_name);	\
+#define NODE_PRINT(X)							\
+	printf("%s\n", (X)->ar_name);				\
 	printf("\tdate %d\n", (int)(X)->ar_date);	\
-	printf("\tuid %d\n", (int)(X)->ar_uid);	\
-	printf("\tgid %d\n", (int)(X)->ar_gid);	\
+	printf("\tuid %d\n", (int)(X)->ar_uid);		\
+	printf("\tgid %d\n", (int)(X)->ar_gid);		\
 	printf("\tmode %d\n", (int)(X)->ar_mode);	\
 	printf("\tsize %d\n", (int)(X)->ar_size);	\
 	printf("\toffset %d\n", (int)(X)->offset)
