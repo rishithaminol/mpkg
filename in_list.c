@@ -10,6 +10,12 @@
 
 #include "in_list.h"
 
+struct in_list {
+	int old_ino;
+	char *hlink;
+	struct in_list *next;
+};
+
 static struct in_list *in_new_segment_allocate(void)
 {
 	return (struct in_list *)malloc(sizeof(struct in_list));
