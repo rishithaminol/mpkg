@@ -120,6 +120,14 @@ int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 	return 0;
 }
 
+void ar_extract_all(int fd, struct ar_hdr_ *ar_hdrs, const char *dest)
+{
+	while (!(ar_hdrs == NULL)) {
+		ar_extract(fd, ar_hdrs, dest);
+		ar_hdrs = ar_hdrs->next;
+	}
+}
+
 /* return ar header table */
 struct ar_hdr_ *ar_headers(int fd)
 {
