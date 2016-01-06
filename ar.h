@@ -27,7 +27,7 @@ struct ar_hdr_ {
 
 extern struct ar_hdr_ *ar_headers(int fd);
 extern int ar_extract(int fd, struct ar_hdr_ *t, const char *dest);
+extern void ar_extract_all(int fd, struct ar_hdr_ *ar_hdrs, const char *dest);
 extern int ar_free(struct ar_hdr_ *z);
 extern int ar_open(const char *file);
 extern void ar_close(int fd);
-extern void ar_extract_all(int fd, struct ar_hdr *ar_hdrs, const char *dest);
