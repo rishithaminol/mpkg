@@ -1,0 +1,18 @@
+copy() - copy the given source to the destination
+		including hard links, symlinks, directories
+remove_tmpdir() - remove the given directory
+
+eg:-
+#include "copy.h"
+
+int main()
+{
+	char *src = "/some/src";
+	char *dest = "/some/dest";
+	char *tmpdir = "/some/tmp/dir";
+
+	copy(src, dest);
+	remove_tmpdir(tmpdir);
+
+	return 0;
+}

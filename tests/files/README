@@ -1,0 +1,5 @@
+mpkg-mav - maavee package creator.
+
+ncurses-5.9.mav - original mav file
+ncurses-5.9.mav.bad - no new line at the end of info file
+ncurses-5.9.mav.bad2 - two new lines at the end of info file

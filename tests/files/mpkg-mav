@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ar cr "$1" info control.tar.gz data.tar.gz

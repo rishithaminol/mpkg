@@ -1,0 +1,35 @@
+ar_test() - Test whether given fd is an ar archive
+ar_headers() - After the ar_test(int fd) return all the headers
+				in ar_hdr_ format
+ar_extract() - Extract the given file to the destination
+ar_free() - free up ar_hdr_ chain
+
+eg:-
+int main()
+{
+	int fd;
+	char *archive = "somearch.mav";
+	char *dest = "./";
+	struct ar_hdr_ *ar_hdrs;
+
+	fd = open(archive, O_RDONLY);
+	
+	/* testing the archive */
+	if (!ar_test(fd)) {
+		fprintf(stderr, "%s", archive);
+		close(fd);
+	}
+	
+	/* read the ar headers */
+	ar_hdrs = ar_headers(fd);
+	
+	/* extract one file from the archive 
+	 * in this case first file.
+	 */
+	ar_extract(ar_hdrs, dest);
+
+	/* free up the memory */
+	ar_free(ar_hdrs);
+
+	return 0;
+}

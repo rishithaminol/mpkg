@@ -1,0 +1,18 @@
+{
+	"package": "ncurses",
+	"maintainer": "rishithaminol@gmail.com",
+	"architecture": "amd64",
+	"version": "5.9",
+	"installed-size": 9250122,
+	"dependancies": {
+		"glibc": {"=>": 2.21},
+		"binutils": {"=": 2.25}
+		},
+	"homepage": "www.maavee.org",
+	"description": "ncurses (new curses) is a programming library
+	providing an  API that allows the programmer to write text-based
+	user interfaces in a terminal-independent manner. It is a toolkit
+	for developing \"GUI-like\" application software that runs under
+	a terminal emulator. It also optimizes screen changes,in order
+	to reduce the latency experienced when using remote shells."
+}

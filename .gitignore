@@ -1,0 +1,17 @@
+mpkg
+*.o
+tests/root*
+examples/array
+examples/error
+examples/fts
+examples/ftw
+examples/hash
+examples/hello
+examples/signal
+examples/getopt
+examples/temptest
+examples/json_test1
+examples/json_test4
+examples/info
+examples/json_test_cast
+examples/c_unions
