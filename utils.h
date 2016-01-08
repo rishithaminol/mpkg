@@ -15,4 +15,7 @@
 		printf("%d: %s() %s PASSED\n", __LINE__, __FUNCTION__, __FILE__);
 #endif
 
+/* return 0 on success
+ * otherwise return errno occured
+ */
 extern int file_exist(const char *filename);
