@@ -4,27 +4,22 @@
 #include <getopt.h>
 #include <errno.h>
 #include <linux/limits.h>	/* NAME_MAX */
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
+#include "mpkg.h"
 #include "utils.h"
 #include "copy.h"
 #include "ar.h"
-#include "info.h"
 
 char *tmp_dir = "/tmp/mpkg";
 char *tmp_data_dir = "/tmp/mpkg/data";
 char *tmp_config_dir = "/tmp/mpkg/config";
-char *prefix = NULL;			/* prefix where files are installed */
-char *prog_name = NULL;			/* program name */
+char *prog_name = NULL;		/* program name */
+char prefix[4096];			/* prefix where files are installed */
 char *archive = NULL;
 
-static char *default_prefix = "/";
-
-int tar_extract(const char *str, const char *dest);
-void prepare_tempds(void);
-void mpkg_usage(int exit_status);
-
+/* mpkg option flags */
 int iflag, rflag = 0;
 static int clean_temps = 1;
 struct option longopts[] = {
@@ -35,10 +30,13 @@ struct option longopts[] = {
 	{0, 0, 0, 0}
 };
 
+static int tar_extract(const char *src, const char *dest);
+static void prepare_tempds(void);
+
 int main(int argc, char *argv[])
 {
-	int ret, c, fd;
-	struct ar_hdr_ *ar_hdrs, *t;
+	int ret, c;
+	ar_object *ar1;
 
 	prog_name = *argv;
 
@@ -55,7 +53,8 @@ int main(int argc, char *argv[])
 			break;
 		case 'r':
 			rflag = 1;
-			prefix = optarg;
+			/*prefix = optarg;*/
+			strcpy(prefix, optarg);
 			break;
 		case 'h':
 			mpkg_usage(EXIT_SUCCESS);
@@ -79,7 +78,7 @@ int main(int argc, char *argv[])
 
 	/* if root is not given */
 	if (rflag == 0)
-		prefix = default_prefix;
+		strcpy(prefix, "/");
 
 	/* if root is given */
 	ret = file_exist(prefix);
@@ -88,7 +87,9 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
+#ifdef DEBUG___
 	PRINTF_STRING(prefix);
+#endif
 
 	/* check existance of the archive */
 	if ((ret = file_exist(archive))) {
@@ -100,15 +101,9 @@ int main(int argc, char *argv[])
 	prepare_tempds();
 
 	/* if archive open fail 'goto clean_out' */
-	if (!(fd = ar_open(archive)))	goto clean_out;
-	ar_hdrs = ar_headers(fd);	/* get ar headers */
-	t = ar_hdrs;
-
-	/* successfully extract all files to tmp_dir */
-	while (!(t == NULL)) {
-		ar_extract(fd, t, tmp_dir);
-		t = t->next;
-	}
+	ar1 = ar_open(archive);
+	if (ar1 == NULL)	goto clean_out;
+	ar_extract_all(ar1, tmp_dir);	/* extract all files to tmp_dir */
 
 	tar_extract("/tmp/mpkg/control.tar.gz", tmp_config_dir);
 	tar_extract("/tmp/mpkg/data.tar.gz", tmp_data_dir);
@@ -121,14 +116,13 @@ int main(int argc, char *argv[])
 	/* after copying there sould be post installation function handle */
 clean_out:
 	/* free ar headers */
-	ar_free(ar_hdrs);
-	ar_close(fd);
+	ar_close(ar1);
 	clean_temps ? remove_tmpdir(tmp_dir) : FALSE;
 
 	return 0;
 }
 
-int tar_extract(const char *src, const char *dest)
+static int tar_extract(const char *src, const char *dest)
 {
 	char cmd[NAME_MAX];
 
@@ -143,7 +137,7 @@ int tar_extract(const char *src, const char *dest)
 	return 0;
 }
 
-void prepare_tempds(void)
+static void prepare_tempds(void)
 {
 	if (file_exist(tmp_dir) == 0) {
 		printf("removing previous temp files\n");
