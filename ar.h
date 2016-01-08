@@ -1,5 +1,9 @@
+#ifndef _AR_H
+#define _AR_H
+
 #define ARMAG	"!<arch>\n"	/* String that begins an archive file.  */
 #define SARMAG	8		/* Size of that string.  */
+#define AR_HEADER_SIZE 60
 
 /* ar header info */
 struct ar_hdr_ {
@@ -13,6 +17,8 @@ struct ar_hdr_ {
 	struct ar_hdr_ *next;	/* next header */
 };
 
+typedef struct ar_object ar_object;
+
 /*
 	ar_headers() - After the ar_test(int fd) return all the headers
 							in ar_hdr_ format
@@ -24,10 +30,10 @@ struct ar_hdr_ {
 
 	see doc/ar_info for more infomation.
 */
+extern struct ar_hdr_ *ar_search(ar_object *obj, const char *name);
+extern int ar_extract(int fd, struct ar_hdr_ *hdr, const char *dest);
+extern void ar_extract_all(ar_object *obj, const char *dest);
+extern ar_object *ar_open(const char *file);
+extern int ar_close(ar_object *obj);
 
-extern struct ar_hdr_ *ar_headers(int fd);
-extern int ar_extract(int fd, struct ar_hdr_ *t, const char *dest);
-extern void ar_extract_all(int fd, struct ar_hdr_ *ar_hdrs, const char *dest);
-extern int ar_free(struct ar_hdr_ *z);
-extern int ar_open(const char *file);
-extern void ar_close(int fd);
+#endif /* _AR_H */
