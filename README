@@ -22,6 +22,20 @@ Please folow linux kernel coding style
 <https://www.kernel.org/doc/Documentation/CodingStyle>
 	* you should enter new line at the end of every source file.
 
+Contributing
+------------
+	* You can use your own debugging tools but I recommend
+	  valgrind and gdb to debug your executable(s).
+	* To beautify the code you can use uncrustify(The code
+	  beautifier for C). On some distributions this command does
+	  not exist. I recommend to use uncrustify.cfg as the default
+	  uncrustify config because it is a small derivative of
+	  uncrustify examples with a litle customizations.
+	* You can download the uncrustify source and compile it yourself.
+	  <http://sourceforge.net/projects/uncrustify/files/>.
+	* There are small scripts in the scripts/ directory you can
+	  use them to manage code yourself.
+
 
 Contacts
 --------
