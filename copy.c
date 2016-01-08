@@ -35,14 +35,18 @@ static int fts_compare(const FTSENT **one, const FTSENT **two)
 /* copy reagular files */
 static void copy_file(const FTSENT *f, const char *dest_path)
 {
-    int src_fd, dest_fd;
+	int src_fd, dest_fd, option;
 	int n;
-    unsigned char buffer[MAX_READ_BUFF];
+	unsigned char buffer[MAX_READ_BUFF];
 
-    src_fd = open(f->fts_path, O_RDONLY);
-    dest_fd = open(dest_path, O_WRONLY|O_CREAT|O_EXCL, f->fts_statp->st_mode);
+	option = (file_exist(dest_path) == 0)
+		? O_WRONLY|O_TRUNC
+		: O_WRONLY|O_CREAT|O_EXCL;
 
-    while ((n = read(src_fd, buffer, MAX_READ_BUFF)))
+	src_fd = open(f->fts_path, O_RDONLY);
+	dest_fd = open(dest_path, option, f->fts_statp->st_mode);
+
+	while ((n = read(src_fd, buffer, MAX_READ_BUFF)))
 		write(dest_fd, buffer, n);
 
 	close(dest_fd);
@@ -50,16 +54,22 @@ static void copy_file(const FTSENT *f, const char *dest_path)
 }
 
 /* copy symlinks */
-static void copy_link(const FTSENT *p, const char *dest_path)
+static void copy_link(const FTSENT *f, const char *dest_path)
 {
-	char link_name[PATH_MAX];
-	ssize_t x;
+	char pointed_path[PATH_MAX];
+	ssize_t n;
 
-	x = readlink(p->fts_path, link_name, 
-		p->fts_statp->st_size + 1);
-	link_name[x] = '\0';
+	n = readlink(f->fts_path, pointed_path,
+		f->fts_statp->st_size + 1);
+	pointed_path[n] = '\0';
 
-	symlink(link_name, dest_path);
+	if (file_exist(dest_path) == 0)
+		unlink(dest_path);
+
+	if (symlink(pointed_path, dest_path) == -1) {
+		printf("%s: '%s' Warning %s\n", prog_name, __func__,
+			strerror(errno));
+	}
 }
 
 /* copy hard links using in_list linked struct.
