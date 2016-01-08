@@ -1,4 +1,6 @@
-/* functions in this file is used to manage unix archive format */
+/* functions in this file is used
+ * to manage unix archive format
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -24,13 +26,25 @@
 	printf("\toffset %d\n", (int)(X)->offset)
 #endif
 
+typedef struct ar_object {
+	int ar_fd;
+	struct ar_hdr_ *ar_hdr_table;
+	struct ar_hdr_ *curr_hdr;	/* currently pointing headr */
+} ar_object;
+
+static struct ar_hdr_ *allocate_node(void);
+static struct ar_hdr_ *ar_new_node(const char *header);
+static struct ar_hdr_ *ar_headers(int fd);
+static int ar_test(int fd);
+static int ar_free(struct ar_hdr_ *z);
+
 static struct ar_hdr_ *allocate_node(void)
 {
 	return (struct ar_hdr_ *)malloc(sizeof(struct ar_hdr_));
 }
 
 /* convert string type header */
-static struct ar_hdr_ *ar_new_node(char *header)
+static struct ar_hdr_ *ar_new_node(const char *header)
 {
 	int i;
 	char fname_part[16];
@@ -60,7 +74,7 @@ static struct ar_hdr_ *ar_new_node(char *header)
 	t->ar_date = (time_t)strtol(header + 16, &endptr, 10);
 	t->ar_uid = (uid_t)strtol(endptr, &endptr, 10);
 	t->ar_gid = (gid_t)strtol(endptr, &endptr, 10);
-	t->ar_mode = (mode_t)strtol(endptr, &endptr, 8);
+	t->ar_mode = (mode_t)strtol(endptr, &endptr, 8); /* octal */
 	t->ar_size = (off_t)strtol(endptr, &endptr, 10);
 	t->next = NULL;
 
@@ -120,20 +134,27 @@ int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 	return 0;
 }
 
-void ar_extract_all(int fd, struct ar_hdr_ *ar_hdrs, const char *dest)
+void ar_extract_all(ar_object *obj, const char *dest)
 {
-	while (!(ar_hdrs == NULL)) {
-		ar_extract(fd, ar_hdrs, dest);
-		ar_hdrs = ar_hdrs->next;
+	struct ar_hdr_ *t;
+
+	t = obj->ar_hdr_table;
+
+	while (!(t == NULL)) {
+		ar_extract(obj->ar_fd, t, dest);
+		t = t->next;
 	}
 }
 
 /* return ar header table */
-struct ar_hdr_ *ar_headers(int fd)
+static struct ar_hdr_ *ar_headers(int fd)
 {
 	int n; /* bytes read */
-	char header[60];
+	char header[AR_HEADER_SIZE];
 	struct ar_hdr_ *_ar_hdr_table, **tt;
+#ifdef DEBUG___
+	int count = 0;
+#endif
 
 	/* set position to the first header from
 	 * the begining of file "!<arch>\n"
@@ -142,15 +163,16 @@ struct ar_hdr_ *ar_headers(int fd)
 	
 	tt = &_ar_hdr_table;
 
-	while ((n = read(fd, header, 60))) {
-		/* if header length < 60 it is not a header */
-		if (n < 60)
+	while ((n = read(fd, header, AR_HEADER_SIZE))) {
+		/* if header length < AR_HEADER_SIZE it is not a header */
+		if (n < AR_HEADER_SIZE)
 			break;
 
 		*tt = ar_new_node(header);
 		(*tt)->offset = lseek(fd, 0, SEEK_CUR);
 		lseek(fd, (*tt)->ar_size, SEEK_CUR);
 #ifdef DEBUG___
+		PRINTF_INT(count++);
 		PRINTF_INT(n);
 		PRINTF_STRING(header);
 		NODE_PRINT(*tt);
@@ -171,9 +193,9 @@ static int ar_test(int fd)
 }
 
 /* free up ar_hdr_ structure or structure chain */
-int ar_free(struct ar_hdr_ *z)
+static int ar_free(struct ar_hdr_ *z)
 {
-	struct ar_hdr_ *tmp, *h = z;
+	struct ar_hdr_ *t, *h = z;
 
 	if (z == NULL) {
 		fprintf(stderr, "%s: '%s' bad value\n", prog_name, __func__);
@@ -181,35 +203,62 @@ int ar_free(struct ar_hdr_ *z)
 	}
 
 	while (1) {
-		tmp = h->next;
+		t = h->next;
 		free(h->ar_name);
 		free(h);
-		if (tmp == NULL)
+		if (t == NULL)
 			break;
-		h = tmp;
+		h = t;
 	}
 
 	return 0;
 }
 
-int ar_open(const char *file)
+ar_object *ar_open(const char *file)
 {
 	int fd;
+	ar_object *ar_obj;
 
 	fd = open(file, O_RDONLY);
 
 	/* check archive format */
 	if (ar_test(fd) == -1) {
 		fprintf(stderr, "%s: '%s' bad archive\n", prog_name, archive);
+		close(fd);
+		return NULL;
+	}
+
+	ar_obj = (ar_object *)malloc(sizeof(ar_object));
+
+	ar_obj->ar_fd = fd;
+	ar_obj->ar_hdr_table = ar_headers(ar_obj->ar_fd);
+	ar_obj->curr_hdr = ar_obj->ar_hdr_table; /* the first element in the table */
+
+	return ar_obj;
+}
+
+int ar_close(ar_object *obj)
+{
+	if (obj == NULL) {
+		fprintf(stderr, "%s: '%s' bad value\n", prog_name, __func__);
 		return -1;
 	}
 
-	return fd;
+	ar_free(obj->ar_hdr_table);
+	close(obj->ar_fd);
+	free(obj);
+
+	return 0;
 }
 
-void ar_close(int fd)
+struct ar_hdr_ *ar_search(ar_object *obj, const char *fname)
 {
-	close(fd);
+	struct ar_hdr_ *t = obj->ar_hdr_table;
+
+	while (!(strcmp(t->ar_name, fname) == 0))
+		t = t->next;
+
+	return t;
 }
 
 /*int main(int argc, char *argv[])
