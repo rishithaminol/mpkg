@@ -1,0 +1,11 @@
+func_pass.c - trained uses of 'functions as parameters'.
+c_unions.c - trained uses of unions (a way of using same memory location).
+array.c - trained uses of linked structure chain.
+error.c - learned C error handling
+fts.c - learned C file handling with fts.h (I recommend fts.h than ftw.h).
+ftw.c - learned C file handling with ftw.h.
+getopt.c - learned C and GNU C option handling.
+hash.c - still not investigated.
+hello.c - checked uses of (char **) types.
+info.c - uses of json-c library.
+signal.c - still not investigated.
