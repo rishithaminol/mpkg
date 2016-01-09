@@ -17,3 +17,4 @@ examples/json_test_cast
 examples/c_unions
 examples/func_pass
 tests/ar_test
+tests/info_test
