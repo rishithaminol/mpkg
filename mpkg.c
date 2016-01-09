@@ -115,7 +115,6 @@ int main(int argc, char *argv[])
 
 	/* after copying there sould be post installation function handle */
 clean_out:
-	/* free ar headers */
 	ar_close(ar1);
 	clean_temps ? remove_tmpdir(tmp_dir) : FALSE;
 
