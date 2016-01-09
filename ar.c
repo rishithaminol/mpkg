@@ -29,7 +29,6 @@
 typedef struct ar_object {
 	int ar_fd;
 	struct ar_hdr_ *ar_hdr_table;
-	struct ar_hdr_ *curr_hdr;	/* currently pointing headr */
 } ar_object;
 
 static struct ar_hdr_ *allocate_node(void);
@@ -118,7 +117,7 @@ int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 	}
 
 	/*to be tested*/
-	/*for (i = 1; !(i == count); i++) {
+	/*for (i = 0; !(i == count); i++) {
 		n = read(fd, buff, option);
 		write(fd2, buff, n);
 	}*/
@@ -160,7 +159,7 @@ static struct ar_hdr_ *ar_headers(int fd)
 	 * the begining of file "!<arch>\n"
 	 */
 	lseek(fd, SARMAG, SEEK_SET);
-	
+
 	tt = &_ar_hdr_table;
 
 	while ((n = read(fd, header, AR_HEADER_SIZE))) {
@@ -232,7 +231,6 @@ ar_object *ar_open(const char *file)
 
 	ar_obj->ar_fd = fd;
 	ar_obj->ar_hdr_table = ar_headers(ar_obj->ar_fd);
-	ar_obj->curr_hdr = ar_obj->ar_hdr_table; /* the first element in the table */
 
 	return ar_obj;
 }
@@ -251,14 +249,71 @@ int ar_close(ar_object *obj)
 	return 0;
 }
 
+/*
+ * find the ar_hdr_ structure for the given name
+ *
+ * obj:	ar_object
+ * fname: file name to search
+ *
+ * return: if no ar_hdr_ found return NULL
+ */
 struct ar_hdr_ *ar_search(ar_object *obj, const char *fname)
 {
 	struct ar_hdr_ *t = obj->ar_hdr_table;
 
-	while (!(strcmp(t->ar_name, fname) == 0))
+	while (!(t == NULL) && !(strcmp(t->ar_name, fname) == 0))
 		t = t->next;
 
 	return t;
+}
+
+/*
+ * find the file name named 'fname' in the given
+ * ar_object and read that file flushing output to the
+ * externally user defined function.
+ *
+ * obj: ar_object
+ * fname: file name to find in the ar_object
+ * extern_func: externally user defined function
+ *
+ * return: return 0 on sucsess. If function fails
+ *			return -1.
+ */
+int ar_grab(ar_object *obj, const char *fname,
+	void (*extern_func)(char *, int))
+{
+	struct ar_hdr_ *ar_hdr;
+	int fd;
+	int i, count, option = MAX_READ_BUFF;
+	ssize_t n;
+	char buff[MAX_READ_BUFF];
+
+	fd = obj->ar_fd;
+	ar_hdr = ar_search(obj, fname);
+	lseek(fd, ar_hdr->offset, SEEK_SET);
+
+	if (ar_hdr == NULL)
+		return -1;
+
+	if (ar_hdr->ar_size <= MAX_READ_BUFF) {
+		option = ar_hdr->ar_size;
+		count = 1;
+	} else if (ar_hdr->ar_size > MAX_READ_BUFF) {
+		count = ar_hdr->ar_size / MAX_READ_BUFF;
+
+		/* write mismatch bytes first */
+		if (ar_hdr->ar_size % MAX_READ_BUFF) { /* if mismatch is !0 */
+			n = read(fd, buff, ar_hdr->ar_size % MAX_READ_BUFF);
+			extern_func(buff, n);
+		}
+	}
+
+	for(i = 0; !(i == count); i++) {
+		n = read(fd, buff, option);
+		extern_func(buff, n);
+	}
+
+	return 0;
 }
 
 /*int main(int argc, char *argv[])

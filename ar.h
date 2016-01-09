@@ -35,5 +35,7 @@ extern int ar_extract(int fd, struct ar_hdr_ *hdr, const char *dest);
 extern void ar_extract_all(ar_object *obj, const char *dest);
 extern ar_object *ar_open(const char *file);
 extern int ar_close(ar_object *obj);
+extern int ar_grab(ar_object *obj, const char *fname,
+	void (*extern_func)(char *, int));
 
 #endif /* _AR_H */
