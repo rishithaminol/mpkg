@@ -7,14 +7,14 @@
 
 /* ar header info */
 struct ar_hdr_ {
-	char 	*ar_name;	/* Member file name. / terminated */
-	time_t 	ar_date;	/* File date unix Epoch format */
-	uid_t	ar_uid;		/* User id */
-	gid_t	ar_gid;		/* Group id */
-	mode_t 	ar_mode;	/* File mode in octal */
-	off_t 	ar_size;	/* File size */
-	off_t	offset;		/* Offset in the main archive */
-	struct ar_hdr_ *next;	/* next header */
+	char 			*ar_name;	/* Member file name. / terminated */
+	double 			ar_date;	/* File date unix Epoch format */
+	unsigned int	ar_uid;		/* User id */
+	unsigned int	ar_gid;		/* Group id */
+	unsigned int	ar_mode;	/* File mode in octal */
+	ssize_t			ar_size;	/* File size */
+	ssize_t			offset;		/* Offset in the main archive */
+	struct			ar_hdr_ *next;	/* next header */
 };
 
 typedef struct ar_object ar_object;

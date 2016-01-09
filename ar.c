@@ -70,11 +70,11 @@ static struct ar_hdr_ *ar_new_node(const char *header)
 	 * strtol() converts first number and points endptr 
 	 * to the next number
 	 */
-	t->ar_date = (time_t)strtol(header + 16, &endptr, 10);
-	t->ar_uid = (uid_t)strtol(endptr, &endptr, 10);
-	t->ar_gid = (gid_t)strtol(endptr, &endptr, 10);
-	t->ar_mode = (mode_t)strtol(endptr, &endptr, 8); /* octal */
-	t->ar_size = (off_t)strtol(endptr, &endptr, 10);
+	t->ar_date = strtol(header + 16, &endptr, 10);
+	t->ar_uid = (unsigned int)strtol(endptr, &endptr, 10);
+	t->ar_gid = (unsigned int)strtol(endptr, &endptr, 10);
+	t->ar_mode = (unsigned int)strtol(endptr, &endptr, 8); /* octal */
+	t->ar_size = (ssize_t)strtol(endptr, &endptr, 10);
 	t->next = NULL;
 
 	return t;
@@ -161,7 +161,7 @@ static struct ar_hdr_ *ar_headers(int fd)
 			break;
 
 		*tt = ar_new_node(header);
-		(*tt)->offset = lseek(fd, 0, SEEK_CUR);
+		(*tt)->offset = (ssize_t)lseek(fd, 0, SEEK_CUR);
 		lseek(fd, (*tt)->ar_size, SEEK_CUR);
 #ifdef DEBUG___
 		PRINTF_INT(count++);
