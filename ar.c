@@ -116,16 +116,9 @@ int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 		}
 	}
 
-	/*to be tested*/
-	/*for (i = 0; !(i == count); i++) {
+	for (i = 0; !(i == count); i++) { /* executes 'count' times */
 		n = read(fd, buff, option);
 		write(fd2, buff, n);
-	}*/
-
-	for (i = 1; (n = read(fd, buff, option)); i++) {
-		write(fd2, buff, n);
-
-		if (i == count)	break;
 	}
 
 	close(fd2);
