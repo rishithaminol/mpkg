@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #ifndef TRUE
 #define TRUE (1 == 1)
 #define FALSE (!TRUE)
@@ -19,3 +22,5 @@
  * otherwise return errno occured
  */
 extern int file_exist(const char *filename);
+
+#endif /* UTILS_H */
