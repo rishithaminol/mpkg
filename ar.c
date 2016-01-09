@@ -126,6 +126,37 @@ int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 	return 0;
 }
 
+/*static int global_fd;
+
+static void _ar_extract(char *str, int n)
+{
+	write(global_fd, str, n);
+}
+
+int ar_extract(ar_object *obj, const char *fname, const char *dest)
+{
+	struct ar_hdr_ *t;
+	char d_path[256];
+	int _error;
+
+	t = ar_search(obj, fname);
+
+	sprintf(d_path, "%s/%s", dest, t->ar_name);
+	global_fd = open(d_path, O_WRONLY|O_CREAT|O_EXCL, t->ar_mode);
+	_error = errno;
+	if (global_fd == -1) {
+		fprintf(stderr, "%s: '%s' %s\n",
+			prog_name, t->ar_name, strerror(_error));
+		return EXIT_FAILURE;
+	}
+
+	ar_grab(obj, fname, &_ar_extract);
+
+	close(global_fd);
+
+	return 0;
+}*/
+
 void ar_extract_all(ar_object *obj, const char *dest)
 {
 	struct ar_hdr_ *t;
