@@ -308,24 +308,3 @@ int ar_grab(ar_object *obj, const char *fname,
 
 	return 0;
 }
-
-/*int main(int argc, char *argv[])
-{
-	int fd, ret;
-	struct ar_hdr_ *x;
-
-	fd = open(argv[1], O_RDONLY);
-
-	ret = ar_test(fd);
-	if (ret == -1) {
-		fprintf(stderr, "%s\n", argv[1]);
-		close(fd);
-		exit(EXIT_FAILURE);
-	}
-	x = ar_headers(fd);
-
-	ar_extract(fd, x->next->next);
-	ar_free(x);
-	
-	close(fd);
-}*/
