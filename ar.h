@@ -3,6 +3,7 @@
 
 #define ARMAG	"!<arch>\n"	/* String that begins an archive file.  */
 #define SARMAG	8		/* Size of that string.  */
+#define ARFMAG	"`\n"		/* String in ar_fmag at end of each header.  */
 #define AR_HEADER_SIZE 60
 
 /* ar header info */
