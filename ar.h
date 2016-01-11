@@ -14,7 +14,7 @@ struct ar_hdr_ {
 	unsigned int	ar_gid;		/* Group id */
 	unsigned int	ar_mode;	/* File mode in octal */
 	ssize_t			ar_size;	/* File size */
-	ssize_t			offset;		/* Offset in the main archive */
+	off_t			offset;		/* Offset in the main archive */
 	struct			ar_hdr_ *next;	/* next header */
 };
 
