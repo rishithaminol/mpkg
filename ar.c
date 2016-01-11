@@ -192,8 +192,16 @@ static struct ar_hdr_ *ar_headers(int fd)
 			break;
 
 		*tt = ar_new_node(header);
-		(*tt)->offset = (ssize_t)lseek(fd, 0, SEEK_CUR);
-		lseek(fd, (*tt)->ar_size, SEEK_CUR);
+		(*tt)->offset = lseek(fd, 0, SEEK_CUR);
+		/* error occured:
+		 * if first file size is odd the ar archive adds new line
+		 * at the end of file. If it is even ar appends second
+		 * file after the first file when creating ar archives.
+		 * In this situation (*tt)->ar_size is not the actual size.
+		 * This bug solves adding 1 by this statement
+		 * ((*tt)->ar_size % 2)
+		 */
+		lseek(fd, (*tt)->ar_size + ((*tt)->ar_size % 2), SEEK_CUR);
 #ifdef DEBUG___
 		PRINTF_INT(count++);
 		PRINTF_INT(n);
