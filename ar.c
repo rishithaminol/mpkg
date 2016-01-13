@@ -173,7 +173,7 @@ void ar_extract_all(ar_object *obj, const char *dest)
 static struct ar_hdr_ *ar_headers(int fd)
 {
 	int n; /* bytes read */
-	char header[AR_HEADER_SIZE];
+	char header[AR_HEADER_SIZE + 1] = "";
 	struct ar_hdr_ *_ar_hdr_table, **tt;
 #ifdef DEBUG___
 	int count = 0;
@@ -318,7 +318,7 @@ int ar_grab(ar_object *obj, const char *fname,
 	int fd;
 	int i, count, option = MAX_READ_BUFF;
 	ssize_t n;
-	char buff[MAX_READ_BUFF];
+	char buff[MAX_READ_BUFF + 1] = "";
 
 	fd = obj->ar_fd;
 	ar_hdr = ar_search(obj, fname);
