@@ -173,7 +173,7 @@ void ar_extract_all(ar_object *obj, const char *dest)
 static struct ar_hdr_ *ar_headers(int fd)
 {
 	int n; /* bytes read */
-	char header[AR_HEADER_SIZE + 1] = "";
+	char *header = (char *)calloc(AR_HEADER_SIZE + 1, sizeof(char));
 	struct ar_hdr_ *_ar_hdr_table, **tt;
 #ifdef DEBUG___
 	int count = 0;
@@ -210,6 +210,8 @@ static struct ar_hdr_ *ar_headers(int fd)
 #endif
 		tt = &((*tt)->next);
 	}
+
+	free(header);
 
 	return _ar_hdr_table;
 }
@@ -318,7 +320,7 @@ int ar_grab(ar_object *obj, const char *fname,
 	int fd;
 	int i, count, option = MAX_READ_BUFF;
 	ssize_t n;
-	char buff[MAX_READ_BUFF + 1] = "";
+	char *buff = (char *)calloc(MAX_READ_BUFF + 1, sizeof(char));
 
 	fd = obj->ar_fd;
 	ar_hdr = ar_search(obj, fname);
@@ -344,6 +346,8 @@ int ar_grab(ar_object *obj, const char *fname,
 		n = read(fd, buff, option);
 		extern_func(buff, n);
 	}
+
+	free(buff);
 
 	return 0;
 }
