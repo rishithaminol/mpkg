@@ -171,7 +171,12 @@ static struct info_field *info_new_field(char *str)
 
 	info_fld = info_allocate_fld();
 	info_fld->fld_name = fld_name;
-	info_fld->fld_type = info_fld_type(key);
+
+	/* empty field recognition */
+	if (strcmp(val, "") == 0)
+		info_fld->fld_type = fld_type_nul;
+	else
+		info_fld->fld_type = info_fld_type(key);
 
 	switch (info_fld->fld_type) {
 		case fld_type_int:
