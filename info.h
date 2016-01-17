@@ -4,7 +4,7 @@
 #include "ar.h"
 
 typedef enum mav_fld_name {	/* mavee package filelds */
-	fld_NULL,	/* null field */
+	fld_NULL,	/* null field (no field) */
 	fld_pkg,
 	fld_maint,	/* maintainer */
 	fld_arch,	/* architecture */

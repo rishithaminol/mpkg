@@ -105,7 +105,13 @@ static am_binary _am_binary(const char *op)
 	return operator;
 }
 
-/* return mav_fld_name for the given string */
+/*
+ * find the given key form pre defined structure rule_table
+ *
+ * key: key name to search.
+ *
+ * return: return mav_fld_name for the given string
+ */
 static mav_fld_name info_fld_name(const char *key)
 {
 	/* number of elements */
