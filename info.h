@@ -44,7 +44,7 @@ struct mav_dep {
 };
 
 typedef enum mav_fld_type { /* field type */
-	fld_type_nul,	/* "" */
+	fld_type_nul,	/* "" --> no value */
 	fld_type_int,	/* number */
 	fld_type_str,	/* string */
 	fld_type_dep	/* dependancy struct */
