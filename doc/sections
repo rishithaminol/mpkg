@@ -1,0 +1,45 @@
+utils.c
+Utility functions useful for the program.
+
+utils.h
+Utility macroes and debugging macros (whose job is to
+output some information to the developer)
+
+mpkg.c
+This is the main source for the programm.
+
+mpkg.h
+This header exports the usage output function and program
+name to other sections.
+temporary file/directory paths used by the programm,
+prefix/archive given by the user.
+
+copy.c/copy.h
+File and directory copying/removing functions
+
+in_list.c/in_list.h
+Used by copy.c to manage inode custom inode table to copy
+hard links.
+
+ar.c
+
+
+info.c
+Read info file in the package and converts its contents
+to a readable structure in a C programming environment.
+The goal of this is,
+ * to give the right infomation to a version comparison scheme. (dependancy checker).
+ * to store the infomation about a package after installation.
+ * to determine architechture with the running system.
+ * size of the package.
+
+info.h
+contains number of typedef enums and structures.
+mav_fld_name - Field names in the format of enum type. This is usefull to hardly use actual field name in string type.
+am_binary - Arithmatic binary operators. Store converted string type arithmatic binary operators ("<=", ">=", "=", ...)
+mav_dep_type - In the dependancy field there is tokens separated by ','. One of these tokens are separaged from '|'. That is why we use two types of tokens. All of these tokens are represented by this typedef enum type.
+struct mav_dep - store dependancy tokens which are more readable by a C program.
+mav_fld_type - Field type.
+struct info_field - store fields which are more readable by a C program.
+
+
