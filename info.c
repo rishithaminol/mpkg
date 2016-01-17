@@ -40,6 +40,8 @@ static struct mav_dep *info_new_dep(char *str, mav_dep_type dep_type);
 static struct mav_dep *info_get_deps(char *deps);
 static void info_free_dep(struct mav_dep *deps);
 static int _regcomp_e(regex_t *preg, const char *expr);
+static int _regexec(const regex_t *preg, const char *string,
+	ssize_t nmatch, regmatch_t *pmatch);
 
 /**
  * fetch info data to the memory
@@ -150,7 +152,7 @@ static struct info_field *info_new_field(char *str)
 	char *key, *val;	/* key value pair dummies */
 
 	_regcomp_e(&key_val_pair, "([a-z\\-]+) *: *\\\"(.*)\\\"");
-	regexec(&key_val_pair, str, 3, pmatch, 0);
+	_regexec(&key_val_pair, str, 3, pmatch);
 
 	str[pmatch[1].rm_eo] = '\0';
 	str[pmatch[2].rm_eo] = '\0';
@@ -248,7 +250,7 @@ static struct mav_dep *info_new_dep(char *str, mav_dep_type dep_type)
 	regex_t reg_ex;
 	_regcomp_e(&reg_ex,
 		"([a-z0-9]+)[ \\t]*\\(([<>=][<>=]*)[ \\t]*([0-9\\.]*)\\)");
-	regexec(&reg_ex, str, 4, pmatch, 0);
+	_regexec(&reg_ex, str, 4, pmatch);
 
 	str[pmatch[1].rm_eo] = '\0';
 	str[pmatch[2].rm_eo] = '\0';
@@ -349,6 +351,20 @@ static int _regcomp_e(regex_t *preg, const char *expr)
 		regerror(regc_ret, preg, errbuf, 256);
 		fprintf(stderr, "%s: %s\n", prog_name, errbuf);
 		return EXIT_FAILURE;
+	}
+
+	return 0;
+}
+
+static int _regexec(const regex_t *preg, const char *string,
+	ssize_t nmatch, regmatch_t *pmatch)
+{
+	int regex_ret;
+
+	regex_ret = regexec(preg, string, nmatch, pmatch, 0);
+	if (regex_ret != 0) {
+		fprintf(stderr, "%s: '%s' no match\n", prog_name, string);
+		return REG_NOMATCH;
 	}
 
 	return 0;
