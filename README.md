@@ -8,7 +8,7 @@ use this tool to manage packages under an LFS system.
 ### What is this repository for? ###
 
 * Quick summary
-* Version
+* This is the on going version.
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
