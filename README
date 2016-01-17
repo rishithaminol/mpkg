@@ -12,8 +12,7 @@ Documentation
 -------------
 mpkg.c - main mpkg executable
 copy.c, copy.h - functions for copying files
-in_list.c, in_list.h - functions and structures in this file is used for
-	hardlink manipulation
+in_list.c, in_list.h - functions and structures in this file is used for hardlink manipulation
 ar.c - this file is used to manage archives
 
 Coding style
