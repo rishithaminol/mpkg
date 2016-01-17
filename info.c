@@ -62,7 +62,8 @@ static void _get_info(char *str, int n)
 	count++;
 }
 
-/* behave like strsep but do not match all charachters in s2
+/*
+ * behave like strsep but do not match all charachters in s2
  * matches entire s2
  */
 static char *_strsep(char **s1, const char *s2)
@@ -84,6 +85,11 @@ static char *_strsep(char **s1, const char *s2)
 /*
  * return enum type binary operator for
  * the given string type operator
+ *
+ * op: string type binary operator
+ *		eg:- '<=', '=', '<=', ...
+ *
+ * return: return am_binary type value.
  */
 static am_binary _am_binary(const char *op)
 {
@@ -106,11 +112,13 @@ static am_binary _am_binary(const char *op)
 }
 
 /*
- * find the given key form pre defined structure rule_table
+ * find the field name from given key using pre
+ * defined 'struct rule_table'.
  *
  * key: key name to search.
  *
- * return: return mav_fld_name for the given string
+ * return: return mav_fld_name type for the given string.
+ *			if error occured return fld_NULL.
  */
 static mav_fld_name info_fld_name(const char *key)
 {
@@ -129,6 +137,15 @@ static mav_fld_name info_fld_name(const char *key)
 	return fld_NULL;
 }
 
+/*
+ * find the field type from given key using pre defined
+ * 'struct rule_table'
+ *
+ * key: key name to search.
+ *
+ * return: return mav_fld_type for the given string.
+ *			if nothing found return fld_type_nul.
+ */
 static mav_fld_type info_fld_type(const char *key)
 {
 	/* number of elements */
@@ -147,7 +164,13 @@ static struct info_field *info_allocate_fld(void)
 	return (struct info_field *)malloc(sizeof(struct info_field));
 }
 
-/* return NULL on errors */
+/*
+ * create a new info_field structure
+ *
+ * str: any info file line
+ *
+ * return: return NULL on errors
+ */
 static struct info_field *info_new_field(char *str)
 {
 	regmatch_t pmatch[3];
