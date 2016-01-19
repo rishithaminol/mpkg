@@ -43,9 +43,8 @@ static int regcomp_e_(regex_t *preg, const char *expr);
 static int regexec_(const regex_t *preg, const char *string,
 	ssize_t nmatch, regmatch_t *pmatch);
 
-/**
- * fetch info data to the memory
- * utility used by ar_grab() in function info_load()
+/*! \brief Fetch info data to the memory (utility used
+ * by ar_grab() in function info_load())
  */
 static void _get_info(char *str, int n)
 {
@@ -234,6 +233,9 @@ static struct info_field *info_new_field(char *str)
 	return info_fld;
 }
 
+/*! \brief Give info_field table for the given ar_object
+ *
+ */
 struct info_field *info_load(ar_object *obj)
 {
 	char *t_str;

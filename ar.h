@@ -1,21 +1,24 @@
 #ifndef _AR_H
 #define _AR_H
 
-#define ARMAG	"!<arch>\n"	/* String that begins an archive file.  */
-#define SARMAG	8		/* Size of that string.  */
-#define ARFMAG	"`\n"		/* String in ar_fmag at end of each header.  */
+/*! String that begins an archive file.  */
+#define ARMAG	"!<arch>\n"
+/*! Size of ARMAG.  */
+#define SARMAG	8
+/*! String in ar_fmag at end of each header.  */
+#define ARFMAG	"`\n"
 #define AR_HEADER_SIZE 60
 
-/* ar header info */
+/*! ar header info */
 struct ar_hdr_ {
-	char 			*ar_name;	/* Member file name. / terminated */
-	double 			ar_date;	/* File date unix Epoch format */
-	unsigned int	ar_uid;		/* User id */
-	unsigned int	ar_gid;		/* Group id */
-	unsigned int	ar_mode;	/* File mode in octal */
-	ssize_t			ar_size;	/* File size */
-	off_t			offset;		/* Offset in the main archive */
-	struct			ar_hdr_ *next;	/* next header */
+	char 			*ar_name;	/*!< Member file name. / terminated */
+	double 			ar_date;	/*!< File date unix Epoch format */
+	unsigned int	ar_uid;		/*!< User id */
+	unsigned int	ar_gid;		/*!< Group id */
+	unsigned int	ar_mode;	/*!< File mode in octal */
+	ssize_t			ar_size;	/*!< File size */
+	off_t			offset;		/*!< Offset in the main archive */
+	struct			ar_hdr_ *next;	/*!< next header */
 };
 
 typedef struct ar_object ar_object;
