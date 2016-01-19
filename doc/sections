@@ -22,6 +22,19 @@ Used by copy.c to manage inode custom inode table to copy
 hard links.
 
 ar.c
+Used to manage unix archive formats.
+Uses special struct called ar_object. It contains header
+table and opened ar file descriptor.
+FEATURES
+--------
+	* search an ar header using a 'char *' type string(ar_search()).
+	* extract a file from the ar archive suplying opened fd and header table. (Still experimental).
+	* extract all files to the given destination.
+	* "extract to memory" using a user defined function (ar_grab()).
+
+ar.h
+Contains ar_hdr_ structure implementing an ar header as
+a C familiar struct.
 
 
 info.c
