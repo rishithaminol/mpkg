@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "copy.h"
 #include "ar.h"
+#include "version.h"
 
 char *tmp_dir = "/tmp/mpkg";
 char *tmp_data_dir = "/tmp/mpkg/data";
@@ -27,6 +28,7 @@ struct option longopts[] = {
 	{"root",		required_argument,	NULL,			'r'},
 	{"keep-temp",	no_argument,		&clean_temps,	  0},
 	{"help",		no_argument,		NULL,			'h'},
+	{"version",		no_argument,		NULL,			'V'},
 	{0, 0, 0, 0}
 };
 
@@ -45,7 +47,7 @@ int main(int argc, char *argv[])
 
 	opterr = 0; /* no getopt_long() error reports */
 
-	while ((c = getopt_long(argc, argv, "i:r:h", longopts, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "i:r:hV", longopts, NULL)) != -1) {
 		switch (c) {
 		case 'i':
 			iflag = 1;
@@ -58,6 +60,10 @@ int main(int argc, char *argv[])
 			break;
 		case 'h':
 			mpkg_usage(EXIT_SUCCESS);
+			break;
+		case 'V':
+			ukussa_version();
+			exit(EXIT_SUCCESS);
 			break;
 		case ':':
 			fprintf(stderr, "%s: option '%s' requires an argument\n", 
