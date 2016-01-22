@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <regex.h>
+
 #ifndef TRUE
 #define TRUE (1 == 1)
 #define FALSE (!TRUE)
@@ -18,9 +20,9 @@
 		printf("%d: %s() %s PASSED\n", __LINE__, __FUNCTION__, __FILE__);
 #endif
 
-/* return 0 on success
- * otherwise return errno occured
- */
 extern int file_exist(const char *filename);
+extern int regcomp_e_(regex_t *preg, const char *expr);
+extern int regexec_(const regex_t *preg, const char *string,
+	ssize_t nmatch, regmatch_t *pmatch);
 
 #endif /* UTILS_H */
