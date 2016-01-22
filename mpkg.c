@@ -15,13 +15,13 @@
 char *tmp_dir = "/tmp/mpkg";
 char *tmp_data_dir = "/tmp/mpkg/data";
 char *tmp_config_dir = "/tmp/mpkg/config";
-char *prog_name = NULL;		/* program name */
-char prefix[4096];			/* prefix where files are installed */
-char *archive = NULL;
+char *prog_name = NULL;	/*!< @brief Program name. */
+char prefix[4096];		/*!< @brief Prefix path (destination installation) */
+char *archive = NULL;	/*!< @brief Archive path currently in use */
 
 /* mpkg option flags */
 int iflag, rflag = 0;
-static int clean_temps = 1;
+static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
 	{"install",		required_argument,	NULL,			'i'},
 	{"root",		required_argument,	NULL,			'r'},

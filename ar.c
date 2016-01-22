@@ -1,5 +1,5 @@
-/* functions in this file is used
- * to manage unix archive format
+/*! @file ar.c
+ *  @brief Functions in this file is used to manage unix archive format
  */
 
 #include <stdio.h>
@@ -32,7 +32,7 @@ typedef struct ar_object {
 } ar_object;
 
 static struct ar_hdr_ *allocate_node(void);
-static struct ar_hdr_ *ar_new_node(const char *header);
+static struct ar_hdr_ *ar_new_header(const char *header);
 static struct ar_hdr_ *ar_headers(int fd);
 static int ar_test(int fd);
 static int ar_free(struct ar_hdr_ *z);
@@ -42,8 +42,10 @@ static struct ar_hdr_ *allocate_node(void)
 	return (struct ar_hdr_ *)malloc(sizeof(struct ar_hdr_));
 }
 
-/* convert string type header */
-static struct ar_hdr_ *ar_new_node(const char *header)
+/*! @brief Convert string type header
+ *	@todo Header checking needs more attention.
+ */
+static struct ar_hdr_ *ar_new_header(const char *header)
 {
 	int i;
 	char fname_part[16];
@@ -51,7 +53,7 @@ static struct ar_hdr_ *ar_new_node(const char *header)
 	struct ar_hdr_ *t = allocate_node();
 
 	strncpy(fname_part, header, 16);
-	if (strchr(fname_part, '/') == NULL) {
+	if (strchr(fname_part, '/') == NULL) {	/* header checking */
 		fprintf(stderr, "%s: '%s' bad ar header\n", prog_name, archive);
 		/* attackers can break the program by inserting invalid
 		 * headers so at this point program should break
@@ -80,9 +82,22 @@ static struct ar_hdr_ *ar_new_node(const char *header)
 	return t;
 }
 
-/*
- * fetch file from the given fd if you
- * provide correct fd, and the ar header info.
+/*! @brief Fetch file from the given fd.
+ *
+ * If you provide correct fd, and the ar header info this
+ * function will extract file to the destination.
+ *
+ * @todo opened file descriptor should not be exposed to the
+ *		 function caller. There is no way to get filedescriptor
+ *		 out of this module. If caller wants to extract one file,
+ *		 he/she must do that using an ar object.
+ *
+ * @param[in] fd File discriptor.
+ * @param[in] t ar header.
+ * @param[in] dest Destination Directory.
+ *
+ * @return return 0 on succses. returns \b EXIT_FAILURE on
+ *			errors.
  */
 int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 {
@@ -126,7 +141,7 @@ int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 	return 0;
 }
 
-/*static int global_fd;
+/*! @cond static int global_fd;
 
 static void _ar_extract(char *str, int n)
 {
@@ -155,7 +170,8 @@ int ar_extract(ar_object *obj, const char *fname, const char *dest)
 	close(global_fd);
 
 	return 0;
-}*/
+}
+* @endcond */
 
 void ar_extract_all(ar_object *obj, const char *dest)
 {
@@ -169,7 +185,15 @@ void ar_extract_all(ar_object *obj, const char *dest)
 	}
 }
 
-/* return ar header table */
+/*! @brief return ar header table for the given fd.
+ *
+ * Fd should be a file discriptor to a valid ar archive.
+ *
+ * @param[in]	fd	Filedescriptor to the archive.
+ *
+ * @return	return all ar headers. On errors internal function
+ *			ar_new_header() will terminate the program.
+ */
 static struct ar_hdr_ *ar_headers(int fd)
 {
 	int n; /* bytes read */
@@ -191,7 +215,7 @@ static struct ar_hdr_ *ar_headers(int fd)
 		if (n < AR_HEADER_SIZE)
 			break;
 
-		*tt = ar_new_node(header);
+		*tt = ar_new_header(header);
 		(*tt)->offset = lseek(fd, 0, SEEK_CUR);
 		/* error occured:
 		 * if first file size is odd the ar archive adds new line
@@ -216,6 +240,7 @@ static struct ar_hdr_ *ar_headers(int fd)
 	return _ar_hdr_table;
 }
 
+/*! @brief Examine ar archive */
 static int ar_test(int fd)
 {
 	char buff[SARMAG];
@@ -225,7 +250,7 @@ static int ar_test(int fd)
 	return strncmp(buff, ARMAG, SARMAG) ? -1 : 0;
 }
 
-/* free up ar_hdr_ structure or structure chain */
+/*! @brief free up ar_hdr_ structure or structure chain */
 static int ar_free(struct ar_hdr_ *z)
 {
 	struct ar_hdr_ *t, *h = z;
@@ -247,6 +272,13 @@ static int ar_free(struct ar_hdr_ *z)
 	return 0;
 }
 
+/*! @brief Create an ar object for the given filename
+ *
+ * @param [in] file Path to the archive.
+ *
+ * @return Return \b NULL on errors otherwise return
+ * 			ar_object.
+ */
 ar_object *ar_open(const char *file)
 {
 	int fd;
@@ -283,13 +315,13 @@ int ar_close(ar_object *obj)
 	return 0;
 }
 
-/*
- * find the ar_hdr_ structure for the given name
+/*! @brief find the ar_hdr_ structure for the given name
  *
- * obj:	ar_object
- * fname: file name to search
+ * @param[in] obj ar object
+ * @param[in] fname file name to search
  *
- * return: if no ar_hdr_ found return NULL
+ * @return return pointer to found header if no ar_hdr_
+ *			found return NULL
  */
 struct ar_hdr_ *ar_search(ar_object *obj, const char *fname)
 {
@@ -301,17 +333,19 @@ struct ar_hdr_ *ar_search(ar_object *obj, const char *fname)
 	return t;
 }
 
-/*
- * find the file name named 'fname' in the given
- * ar_object and read that file flushing output to the
- * externally user defined function.
+/*! @brief Read the file name named \b fname.
  *
- * obj: ar_object
- * fname: file name to find in the ar_object
- * extern_func: externally user defined function
+ * This function needs the opened archive's file descriptor that
+ * is why we use ar_object. If fname matches one of the headers
+ * inside ar_object, read that file and flushes output to the
+ * extern_func. extern_func may be called one or more times
+ * according to the file size.
  *
- * return: return 0 on sucsess. If function fails
- *			return -1.
+ * @param [in] obj ar_object
+ * @param [in] fname File name to find in the ar_object
+ * @param [out] extern_func externally user defined function
+ *
+ * @return return 0 on sucsess. If function fails return -1.
  */
 int ar_grab(ar_object *obj, const char *fname,
 	void (*extern_func)(char *, int))

@@ -3,8 +3,9 @@
 #include <unistd.h>
 #include <errno.h>
 
-/* check the exsistance of a file.
- * return 0 on success
+/*! @brief check the exsistance of a file.
+ *  @return return 0 on success. Otherwise return
+ *			\b errno occured.
  */
 int file_exist(const char *filename)
 {
