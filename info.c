@@ -1,5 +1,8 @@
 /*! @file info.c
  *	@brief Read info data from the package info file.
+ *	@detail	This section contains info grammar and rules.
+ *			Converts the given string into a struct type
+ *			list.
  */
 #include <stdio.h>
 #include <string.h>
@@ -7,59 +10,38 @@
 #include <regex.h>
 
 #include "mpkg.h"
+#include "utils.h"
 #include "ar.h"
 #include "info.h"
 
-static char *info_string;	/*!< @brief Global info string */
+/*! @brief infomation object */
+typedef struct info_object {
+	char *info_string;				/*! @brief string tobe converted */
+	struct info_field *fld_list;	/*! @brief info_field after conversion */
+} info_object;
 
-/*!	@brief Maps every field name to mav_fld_name
- *			and field type mav_fld_type.
+/*!	@brief Maps every field name to pkg_fld_name
+ *			and field type pkg_fld_type.
  */
 static struct mav_rules {
-	char	  		 *str;	/*!< @brief mapped string. */
-	mav_fld_name fld_name;	/*!< @brief mapped mav_fld_name. */
-	mav_fld_type fld_type;	/*!< @brief mapped mav_fld_type. */
+	char		*str;	/*!< @brief mapped string. */
+	pkg_fld_type fld_type;	/*!< @brief mapped pkg_fld_type. */
 } fld_map[] = {
-	{"package"			,fld_pkg	,fld_type_str},
-	{"maintainer"		,fld_maint	,fld_type_str},
-	{"architecture"		,fld_arch	,fld_type_str},
-	{"version"			,fld_ver	,fld_type_str},
-	{"installed-size"	,fld_size	,fld_type_int},
-	{"dependancies"		,fld_deps	,fld_type_dep},
-	{"homepage"			,fld_home	,fld_type_str},
-	{"description"		,fld_des	,fld_type_str}
+	{"package"			,fld_type_str},
+	{"maintainer"		,fld_type_str},
+	{"branch"			,fld_type_str},
+	{"architecture"		,fld_type_str},
+	{"version"			,fld_type_str},
+	{"installed-size"	,fld_type_int},
+	{"dependancies"		,fld_type_str},
+	{"homepage"			,fld_type_str},
+	{"description"		,fld_type_str}
 };
 
-static void _get_info(char *str, int n);
 static char *_strsep(char **s1, const char *s2);
-static am_binary _am_binary(const char *op);
-static mav_fld_name info_fld_name(const char *key);
-static mav_fld_type info_fld_type(const char *key);
+static pkg_fld_name info_fld_name(const char *key);
 static struct info_field *info_allocate_fld(void);
 static struct info_field *info_new_field(char *str);
-static struct mav_dep *info_allocate_dep(void);
-static struct mav_dep *info_new_dep(char *str, mav_dep_type dep_type);
-static struct mav_dep *info_get_deps(char *deps);
-static void info_free_dep(struct mav_dep *deps);
-static int regcomp_e_(regex_t *preg, const char *expr);
-static int regexec_(const regex_t *preg, const char *string,
-	ssize_t nmatch, regmatch_t *pmatch);
-
-/*! @brief Update info_string */
-static void _get_info(char *str, int n)
-{
-	static int count = 0;
-
-	if (count > 0) {
-		fprintf(stderr, "%s: info file size is larger than the default\n",
-			prog_name);
-		free(info_string);
-		exit(EXIT_FAILURE);
-	}
-
-	info_string = strdup(str);
-	count++;
-}
 
 /*!	@brief Behaves like strsep but matches entire \b s2. */
 static char *_strsep(char **s1, const char *s2)
@@ -78,40 +60,16 @@ static char *_strsep(char **s1, const char *s2)
 	return t2;
 }
 
-/*! @brief Convert string type binary operator.
- *	@param[in] op string type binary operator
- *		eg:- '<=', '=', '<=', ...
- */
-static am_binary _am_binary(const char *op)
-{
-	am_binary operator;
-
-	switch (*op) {
-		case '=':	operator = eq; break;
-		case '<':	operator = lt; break;
-		case '>':	operator = gt; break;
-	}
-
-	switch (*(op + 1)) {
-		case '=':	operator += eq; break;
-		case '<':	operator += lt; break;
-		case '>':	operator += gt; break;
-		case '\0':	break;
-	}
-
-	return operator;
-}
-
 /*!	@brief Field name for the given key.
  *
  * Uses pre defined \b fld_map[] structure as a map.
  *
  * @param[in] key Key name to search.
  *
- * @return Return mav_fld_name type for the given string.
+ * @return Return pkg_fld_name type for the given string.
  *			If error occured return \b fld_NULL.
  */
-static mav_fld_name info_fld_name(const char *key)
+static pkg_fld_name info_fld_name(const char *key)
 {
 	/* number of elements */
 	int n = (int)sizeof(fld_map)/sizeof(struct mav_rules);
@@ -119,35 +77,13 @@ static mav_fld_name info_fld_name(const char *key)
 
 	for (i = 0; i < n; i++)
 		if (strcmp(key, fld_map[i].str) == 0)
-			return fld_map[i].fld_name;
+			return (pkg_fld_name)i;
 
 	/* after the for loop raise warnings */
 	fprintf(stderr, "%s: '%s' unrecognized field name\n", prog_name, key);
 
 	/* not a nav field. */
 	return fld_NULL;
-}
-
-/*!	@brief Field type for the given key
- *
- * Uses pre defined \b fld_map[] structure.
- *
- * @param key Key name to search.
- *
- * @return Return mav_fld_type for the given string.
- *			If nothing found return fld_type_nul.
- */
-static mav_fld_type info_fld_type(const char *key)
-{
-	/* number of elements */
-	int n = (int)sizeof(fld_map)/sizeof(struct mav_rules);
-	int i;
-
-	for (i = 0; i < n; i++)
-		if (strcmp(key, fld_map[i].str) == 0)
-			return fld_map[i].fld_type;
-
-	return fld_type_nul;
 }
 
 /*! @brief malloc info_field */
@@ -169,7 +105,7 @@ static struct info_field *info_new_field(char *str)
 	regmatch_t pmatch[3];
 	regex_t key_val_pair;
 	struct info_field *info_fld;
-	mav_fld_name fld_name;
+	pkg_fld_name fld_name;
 
 	char *key, *val;	/* key value pair dumy */
 
@@ -201,7 +137,7 @@ static struct info_field *info_new_field(char *str)
 	if (strcmp(val, "") == 0)
 		info_fld->fld_type = fld_type_nul;
 	else
-		info_fld->fld_type = info_fld_type(key);
+		info_fld->fld_type = fld_map[info_fld->fld_name].fld_type;
 
 	switch (info_fld->fld_type) {
 		case fld_type_int:
@@ -210,10 +146,6 @@ static struct info_field *info_new_field(char *str)
 
 		case fld_type_str:
 			info_fld->str = val;
-			break;
-
-		case fld_type_dep:
-			info_fld->dep = info_get_deps(val);
 			break;
 
 		case fld_type_nul:
@@ -227,17 +159,18 @@ static struct info_field *info_new_field(char *str)
 	return info_fld;
 }
 
-/*! @brief Give info_field table for the given ar_object */
-struct info_field *info_load(ar_object *obj)
+/*! @brief convert to info_object type */
+info_object *info_load(const char *str)
 {
 	char *t_str, *t_info_str;	/* dumy */
 	struct info_field **t;		/* dumy */
 	struct info_field *info_fields;
+	info_object *obj = (info_object *)malloc(sizeof(info_object));
 
-	ar_grab(obj, "info", _get_info);
-	t_info_str = info_string;
+	obj->info_string = strdup(str);
+	t_info_str = obj->info_string;
 #ifdef DEBUG___
-	printf("%s\n", info_string);
+	printf("%s\n", obj->info_string);
 #endif
 
 	t = &info_fields;
@@ -254,107 +187,17 @@ struct info_field *info_load(ar_object *obj)
 		t = &((*t)->next);
 	}
 
-	return info_fields;
+	obj->fld_list = info_fields;
+
+	return obj;
 }
 
-/*************** mav_dep structure handling ***************/
-
-/*! @brief malloc mav_dep */
-static struct mav_dep *info_allocate_dep(void)
-{
-	return (struct mav_dep *)malloc(sizeof(struct mav_dep));
-}
-
-static struct mav_dep *info_new_dep(char *str, mav_dep_type dep_type)
-{
-	struct mav_dep *mav_dep;
-	char *pkg_name, *op, *v_num; /* dumy variables */
-
-	regmatch_t pmatch[4];
-	regex_t reg_ex;
-	regcomp_e_(&reg_ex,
-		"([a-z0-9]+)[ \\t]*\\(([<>=][<>=]*)[ \\t]*([0-9\\.]*)\\)");
-	regexec_(&reg_ex, str, 4, pmatch);
-
-	str[pmatch[1].rm_eo] = '\0';
-	str[pmatch[2].rm_eo] = '\0';
-	str[pmatch[3].rm_eo] = '\0';
-
-	pkg_name = str + pmatch[1].rm_so;
-	op = str + pmatch[2].rm_so;
-	v_num = str + pmatch[3].rm_so;
-
-#ifdef DEBUG___
-	printf("\tpkg_name = \"%s\"\n", pkg_name);
-	printf("\tam_binary = \"%s\"\n", op);
-	printf("\tv_num = \"%s\"\n", v_num);
-#endif
-
-	mav_dep = info_allocate_dep();
-	mav_dep->pkg_name = pkg_name;
-	mav_dep->op = _am_binary(op);
-	mav_dep->v_num = v_num;
-	mav_dep->dep_type = dep_type;
-	mav_dep->next = NULL;
-
-	regfree(&reg_ex);
-
-	return mav_dep;
-}
-
-/*!	@brief dependancy package list
- *
- *	Read \b deps and breakes into tokens. These tokens are
- *	dependancy tokens. They are categoraized into two parts.
- *	normal dependancy and not very important.
- *	@param[in]	deps dependancy string.
- */
-static struct mav_dep *info_get_deps(char *deps)
-{
-	char *t_str, *t_str1;	/* dumy */
-	struct mav_dep **t;		/* dumy */
-	struct mav_dep *mav_dep;
-
-	t = &mav_dep;
-
-	while (!((t_str = strsep(&deps, ",")) == NULL)) {
-		if (strchr(t_str, '|') == NULL) {
-			*t = info_new_dep(t_str, dep_type_no);
-			t = &((*t)->next);
-		} else {
-			while (!((t_str1 = strsep(&t_str, "|")) == NULL)) {
-				*t = info_new_dep(t_str1, dep_type_or);
-				t = &((*t)->next);
-			}
-		}
-	}
-
-	return mav_dep;
-}
-
-static void info_free_dep(struct mav_dep *deps)
-{
-	struct mav_dep *t, *curr_pos;
-
-	t = deps;
-
-	while (1) {
-		curr_pos = t;
-
-		if (curr_pos == NULL)
-			break;
-
-		t = t->next;
-		free(curr_pos);
-	}
-}
-
-/*! @brief freeup loaded info_field */
-void info_unload(struct info_field *flds)
+/*! @brief freeup loaded info_object */
+void info_unload(info_object *obj)
 {
 	struct info_field *t, *curr_pos;
 
-	t = flds;
+	t = obj->fld_list;
 
 	while (1) {
 		curr_pos = t;
@@ -362,66 +205,30 @@ void info_unload(struct info_field *flds)
 		if (curr_pos == NULL)
 			break;
 
-		if (curr_pos->fld_type == fld_type_dep)
-			info_free_dep(curr_pos->dep);
-
 		t = t->next;
 		free(curr_pos);
 	}
 
-	free(info_string);
+	free(obj->info_string);
+	free(obj);
 }
 
-/*! @brief Compile regex.
- *
- *	Compile given \b expr and store regex_t in \b preg. If
- *  error occured reports it immediately.
- *
- *	@param[out]	preg regex_t to store.
- *	@param[in]	expr regular expression.
- *
- *	@return return 0 on succses. Otherwise return
- *			\b EXIT_FAILURE.
- */
-static int regcomp_e_(regex_t *preg, const char *expr)
+/*! @brief get the requested info_filed struct. */
+struct info_field *info_get_fld(const info_object *iobj, pkg_fld_name name)
 {
-	int regc_ret;
-	char errbuf[256];
+	struct info_field *t1; /* dumy */
 
-	regc_ret = regcomp(preg, expr, REG_EXTENDED);
+	t1 = iobj->fld_list;
 
-	if (regc_ret != 0) {
-		regerror(regc_ret, preg, errbuf, 256);
-		fprintf(stderr, "%s: %s\n", prog_name, errbuf);
-		return EXIT_FAILURE;
+	while (t1 != NULL) {
+		if (t1->fld_name == name)
+			return t1;
+
+		t1 = t1->next;
 	}
 
-	return 0;
-}
+	fprintf(stderr, "%s: '%s' is not in info object\n",
+		prog_name, fld_map[name].str);
 
-/*! @brief Matches given regex and string.
- *
- *	Matches given \b string with \b preg. If error occured
- *	reports it immediately.
- *
- *	@param[in]	preg Pointer to regex_t.
- *	@param[in]	string String to match.
- *	@param[out]	pmatch array of matches.
- *	@param[in]	nmatch Number of matches expected.
- *
- *	@return return 0 on succses. Otherwise return
- *			\b REG_NOMATCH.
- */
-static int regexec_(const regex_t *preg, const char *string,
-	ssize_t nmatch, regmatch_t *pmatch)
-{
-	int regex_ret;
-
-	regex_ret = regexec(preg, string, nmatch, pmatch, 0);
-	if (regex_ret != 0) {
-		fprintf(stderr, "%s: '%s' no match\n", prog_name, string);
-		return REG_NOMATCH;
-	}
-
-	return 0;
+	return NULL;
 }
