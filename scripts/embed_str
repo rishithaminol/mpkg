@@ -1,9 +1,16 @@
 #!/bin/bash
 
-echo "\"\\"
+echo "
+#include <stdio.h>
+int main(void)
+{"
+echo -e "printf(\"\\"
 
-while IFS='' read line; do
-	echo "$line\\n\\" | sed 's/"/\\&/g'
+while IFS='' read -r line; do
+	echo -n "$line" | sed -e 's/\\/\\&/g' -e 's/"/\\&/g'
+	echo "\\n\\"
 done < "$1"
 
-echo "\""
+echo "\");
+return 0;
+}"
