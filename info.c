@@ -32,6 +32,7 @@ static struct mav_rules {
 	{"branch"			,fld_type_str},
 	{"architecture"		,fld_type_str},
 	{"version"			,fld_type_str},
+	{"release"			,fld_type_str},
 	{"installed-size"	,fld_type_int},
 	{"dependancies"		,fld_type_str},
 	{"homepage"			,fld_type_str},

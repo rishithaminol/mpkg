@@ -10,6 +10,7 @@ typedef enum pkg_fld_name {
 	fld_branch,	/*!< @brief branch */
 	fld_arch,	/*!< @brief architecture */
 	fld_ver,	/*!< @brief version */
+	fld_rele,	/*!< @brief release */
 	fld_size,	/*!< @brief installed-size */
 	fld_deps,	/*!< @brief dependancies */
 	fld_home,	/*!< @brief homepage info */
