@@ -9,6 +9,9 @@
 #endif
 
 #define MAX_READ_BUFF 65536
+#define SYS_ARCH "amd64"
+#define SYS_CODENAME "navam"
+#define MPKG_EXTENSION "mav"
 
 #ifdef DEBUG___
 	#define PRINTF_INT(X) printf("%s = %d\n", #X, X)
