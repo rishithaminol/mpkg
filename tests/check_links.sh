@@ -10,7 +10,7 @@ fi
 
 mkdir "root" "root2"
 
-"$MPKG" -i files/ncurses-5.9.mav -r root || {
+"$MPKG" -i "files/ncurses-5.9-1.0.1.amd64.mav" -r root || {
 	echo "$PROG_NAME: $MPKG makes some errors. return value = $?"
 	exit 1
 }
