@@ -87,11 +87,6 @@ static struct ar_hdr_ *ar_new_header(const char *header)
  * If you provide correct fd, and the ar header info this
  * function will extract file to the destination.
  *
- * @todo opened file descriptor should not be exposed to the
- *		 function caller. There is no way to get filedescriptor
- *		 out of this module. If caller wants to extract one file,
- *		 he/she must do that using an ar object.
- *
  * @param[in] fd File discriptor.
  * @param[in] t ar header.
  * @param[in] dest Destination Directory.
