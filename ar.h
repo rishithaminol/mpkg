@@ -24,7 +24,6 @@ struct ar_hdr_ {
 typedef struct ar_object ar_object;
 
 extern struct ar_hdr_ *ar_search(ar_object *obj, const char *name);
-extern int ar_extract(int fd, struct ar_hdr_ *hdr, const char *dest);
 extern void ar_extract_all(ar_object *obj, const char *dest);
 extern ar_object *ar_open(const char *file);
 extern int ar_close(ar_object *obj);

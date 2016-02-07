@@ -99,7 +99,7 @@ static struct ar_hdr_ *ar_new_header(const char *header)
  * @return return 0 on succses. returns \b EXIT_FAILURE on
  *			errors.
  */
-int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
+static int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 {
 	int i, n, fd2;
 	int count, _error;
