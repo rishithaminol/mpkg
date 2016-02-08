@@ -2,7 +2,9 @@
  *	@brief Read info data from the package info file.
  *	@detail	This section contains info grammar and rules.
  *			Converts the given string into a struct type
- *			list.
+ *			list. Using this we can keep multiple info
+ *			objects in memory.
+ *			options DEBUG___
  */
 #include <stdio.h>
 #include <string.h>
