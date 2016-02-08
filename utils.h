@@ -14,13 +14,13 @@
 #define MPKG_EXTENSION "mav"
 
 #ifdef DEBUG___
-	#define PRINTF_INT(X) printf("%s = %d\n", #X, X)
-	#define PRINTF_STRING(X) printf("%s = \"%s\"\n", #X, X)
+	#define PRINTF_INT(X) printf("[DEBUG] %s = %d\n", #X, X)
+	#define PRINTF_STRING(X) printf("[DEBUG] %s = \"%s\"\n", #X, X)
 	#define DO_STATEMENT(X) \
 		X; \
-		printf("%s\n", #X)
+		printf("[DEBUG] %s\n", #X)
 	#define _LINE_PASS() \
-		printf("%d: %s() %s PASSED\n", __LINE__, __FUNCTION__, __FILE__);
+		printf("[DEBUG] %d: %s() %s PASSED\n", __LINE__, __FUNCTION__, __FILE__);
 #endif
 
 extern int file_exist(const char *filename);
