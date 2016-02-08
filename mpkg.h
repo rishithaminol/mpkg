@@ -5,9 +5,12 @@
 #define MPKG_DB_ "/var/lib/mpkg/mpkg.db"
 #endif
 
-extern char *tmp_dir;
-extern char *tmp_data_dir;
-extern char *tmp_config_dir;
+#ifndef CUSTOM_TEMP_LOCATION
+#define TMP_DIR "/tmp/mpkg"
+#define TMP_DATA_DIR "/tmp/mpkg/data"
+#define TMP_CONFIG_DIR "/tmp/mpkg/config"
+#endif
+
 extern char prefix[4096];
 extern char *prog_name;
 extern char *archive;
