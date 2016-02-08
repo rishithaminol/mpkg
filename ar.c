@@ -1,5 +1,6 @@
 /*! @file ar.c
  *  @brief Functions in this file is used to manage unix archive format
+ *  @detail options DEBUG___
  */
 
 #include <stdio.h>
