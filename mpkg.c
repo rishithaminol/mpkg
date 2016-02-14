@@ -11,23 +11,23 @@
 #include "utils.h"
 #include "copy.h"
 #include "ar.h"
+#include "info.h"
 #include "version.h"
 
-char *tmp_dir = "/tmp/mpkg";
-char *tmp_data_dir = "/tmp/mpkg/data";
-char *tmp_config_dir = "/tmp/mpkg/config";
 char *prog_name = NULL;	/*!< @brief Program name. */
 char prefix[4096];		/*!< @brief Prefix path (destination installation) */
 char *archive = NULL;	/*!< @brief Archive path currently in use */
 
-/* mpkg option flags */
+/* flag variables */
 int iflag, rflag = 0;
+static int infoflag = 0;
 static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
 	{"install",		required_argument,	NULL,			'i'},
 	{"root",		required_argument,	NULL,			'r'},
 	{"keep-temp",	no_argument,		&clean_temps,	  0},
 	{"help",		no_argument,		NULL,			'h'},
+	{"info",		optional_argument,	NULL,			  2},
 	{"version",		no_argument,		NULL,			'V'},
 	{0, 0, 0, 0}
 };
@@ -79,6 +79,9 @@ int main(int argc, char *argv[])
 		case 1:
 			printf("plain argument %s\n", optarg);
 			break;
+		case 2:
+			infoflag = optind;
+			break;
 		}
 	}
 
@@ -109,20 +112,25 @@ int main(int argc, char *argv[])
 	/* if archive open fail 'goto clean_out' */
 	ar1 = ar_open(archive);
 	if (ar1 == NULL)	goto clean_out;
-	ar_extract_all(ar1, tmp_dir);	/* extract all files to tmp_dir */
 
-	tar_extract("/tmp/mpkg/control.tar.gz", tmp_config_dir);
-	tar_extract("/tmp/mpkg/data.tar.gz", tmp_data_dir);
+	if (infoflag > 0) {
+		printf("info details\n");
+		goto clean_out;
+	}
+
+	ar_extract_all(ar1, TMP_DIR);	/* extract all files to TMP_DIR */
+	tar_extract("/tmp/mpkg/control.tar.gz", TMP_CONFIG_DIR);
+	tar_extract("/tmp/mpkg/data.tar.gz", TMP_DATA_DIR);
 
 	/* there should be control directory handlers */
 	/* after extraction there sould be pre install function handle */
 
-	copy(tmp_data_dir, prefix);
+	copy(TMP_DATA_DIR, prefix);
 
 	/* after copying there sould be post installation function handle */
 clean_out:
 	ar_close(ar1);
-	clean_temps ? remove_tmpdir(tmp_dir) : FALSE;
+	clean_temps ? remove_tmpdir(TMP_DIR) : FALSE;
 
 	return 0;
 }
@@ -144,14 +152,14 @@ static int tar_extract(const char *src, const char *dest)
 
 static void prepare_tempds(void)
 {
-	if (file_exist(tmp_dir) == 0) {
+	if (file_exist(TMP_DIR) == 0) {
 		printf("removing previous temp files\n");
-		remove_tmpdir(tmp_dir);
+		remove_tmpdir(TMP_DIR);
 	}
 
-	mkdir(tmp_dir, S_IRWXU);
-	mkdir(tmp_data_dir, S_IRWXU);
-	mkdir(tmp_config_dir, S_IRWXU);
+	mkdir(TMP_DIR, S_IRWXU);
+	mkdir(TMP_DATA_DIR, S_IRWXU);
+	mkdir(TMP_CONFIG_DIR, S_IRWXU);
 }
 
 void mpkg_usage(int exit_status)
@@ -162,6 +170,7 @@ void mpkg_usage(int exit_status)
 		" -i, --install    install given package\n" \
 		" -r, --root       prefix\n" \
 		"     --keep-temp  keep temp files\n" \
+		"     --info       print package infomation.\n" \
 		" -h, --help       help message\n", prog_name);
 
 	exit(exit_status);
