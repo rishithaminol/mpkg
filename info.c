@@ -46,6 +46,25 @@ static pkg_fld_name info_fld_name(const char *key);
 static struct info_field *info_allocate_fld(void);
 static struct info_field *info_new_field(char *str);
 
+/* "all,package,maintainer" */
+/* options all, package, maintainer, architechture, version, dependancy, home,
+ * release, description, installed-size
+ */
+void info_print(const info_object *info /*, const char *commands*/)
+{
+	struct info_field *flds;
+
+	flds = info->fld_list;
+
+	while (flds != NULL) {
+		if (flds->fld_type == fld_type_str)
+			printf("%s\n", flds->str);
+		else
+			printf("%d\n", flds->num);
+		flds = flds->next;
+	}
+}
+
 /*!	@brief Behaves like strsep but matches entire \b s2. */
 static char *_strsep(char **s1, const char *s2)
 {

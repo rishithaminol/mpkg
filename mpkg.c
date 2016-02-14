@@ -14,8 +14,10 @@
 #include "info.h"
 #include "version.h"
 
-char *prog_name = NULL;	/*!< @brief Program name. */
+char temp_str[4096];	/* temporary strings */
+
 char prefix[4096];		/*!< @brief Prefix path (destination installation) */
+char *prog_name = NULL;	/*!< @brief Program name. */
 char *archive = NULL;	/*!< @brief Archive path currently in use */
 
 /* flag variables */
@@ -34,6 +36,22 @@ struct option longopts[] = {
 
 static int tar_extract(const char *src, const char *dest);
 static void prepare_tempds(void);
+
+/*! @brief Update temp_str */
+static void _get_info(char *str, int n)
+{
+	static int count = 0;
+
+	if (count > 0) {
+		fprintf(stderr, "%s: info file size is larger than the default\n",
+			prog_name);
+		exit(EXIT_FAILURE);
+	}
+
+	//info_string = strdup(str);
+	strcpy(temp_str, str);
+	count++;
+}
 
 int main(int argc, char *argv[])
 {
@@ -113,8 +131,14 @@ int main(int argc, char *argv[])
 	ar1 = ar_open(archive);
 	if (ar1 == NULL)	goto clean_out;
 
-	if (infoflag > 0) {
+	if (infoflag > 0) {	/* if '--info' used */
+		info_object *info;
+
 		printf("info details\n");
+		ar_grab(ar1, "info", _get_info);
+		info = info_load(temp_str);
+		info_print(info);
+		info_unload(info);
 		goto clean_out;
 	}
 
