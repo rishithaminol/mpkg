@@ -1,1 +1,1 @@
-extern void ukussa_version(void);
+extern void mpkg_version(void);

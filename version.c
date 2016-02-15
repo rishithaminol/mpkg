@@ -9,7 +9,7 @@
 
 const char *version = VERSION;
 
-void ukussa_version(void)
+void mpkg_version(void)
 {
 	printf("%s\n", version);
 }
