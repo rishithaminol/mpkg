@@ -42,7 +42,7 @@ info_object *info_load(const char *str);
 extern void info_unload(info_object *iobj);
 extern struct info_field *info_get_fld(const info_object *iobj,
 	pkg_fld_name name);
-extern void info_print(const info_object *info /*,
-	const char *commands*/);
+extern void info_print(const info_object *info ,
+	const char *commands);
 
 #endif	/* INFO_H */

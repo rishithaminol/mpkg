@@ -50,18 +50,18 @@ static struct info_field *info_new_field(char *str);
 /* options all, package, maintainer, architechture, version, dependancy, home,
  * release, description, installed-size
  */
-void info_print(const info_object *info /*, const char *commands*/)
+void info_print(const info_object *info , const char *commands)
 {
-	struct info_field *flds;
+	char *s2;
+	char *s1 = strdup(commands);
+	struct info_field *fld;
 
-	flds = info->fld_list;
-
-	while (flds != NULL) {
-		if (flds->fld_type == fld_type_str)
-			printf("%s\n", flds->str);
+	while ((s2 = strsep(&s1, ",")) != NULL) {
+		fld = info_get_fld(info, info_fld_name(s2));
+		if (fld->fld_type == fld_type_str)
+			printf("%s: %s\n", s2, fld->str);
 		else
-			printf("%d\n", flds->num);
-		flds = flds->next;
+			printf("%s: %d\n", s2, fld->num);
 	}
 }
 
@@ -104,7 +104,7 @@ static pkg_fld_name info_fld_name(const char *key)
 	/* after the for loop raise warnings */
 	fprintf(stderr, "%s: '%s' unrecognized field name\n", prog_name, key);
 
-	/* not a nav field. */
+	/* not a mav field. */
 	return fld_NULL;
 }
 
