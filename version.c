@@ -7,9 +7,7 @@
 #define VERSION "ongoing"
 #endif
 
-const char *version = VERSION;
-
 void mpkg_version(void)
 {
-	printf("%s\n", version);
+	printf("%s\n", VERSION);
 }
