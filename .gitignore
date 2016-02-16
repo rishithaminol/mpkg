@@ -19,3 +19,4 @@ examples/func_pass
 tests/ar_test
 tests/info_test
 doc/html/
+sqlite/
