@@ -14,7 +14,7 @@
 #include "info.h"
 #include "version.h"
 
-char temp_str[4096];	/* temporary strings */
+char temp_str[4096];	/* keep temporary strings */
 
 char prefix[4096];		/*!< @brief Prefix path (destination installation) */
 char *prog_name = NULL;	/*!< @brief Program name. */
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 			mpkg_usage(EXIT_SUCCESS);
 			break;
 		case 'V':
-			ukussa_version();
+			mpkg_version();
 			exit(EXIT_SUCCESS);
 			break;
 		case ':':
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 		printf("info details\n");
 		ar_grab(ar1, "info", _get_info);
 		info = info_load(temp_str);
-		info_print(info);
+		info_print(info, argv[infoflag]);
 		info_unload(info);
 		goto clean_out;
 	}
