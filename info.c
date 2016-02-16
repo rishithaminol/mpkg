@@ -46,35 +46,6 @@ static pkg_fld_name info_fld_name(const char *key);
 static struct info_field *info_allocate_fld(void);
 static struct info_field *info_new_field(char *str);
 
-/* "all,package,maintainer" */
-/* options all, package, maintainer, architechture, version, dependancy, home,
- * release, description, installed-size
- */
-void info_print(const info_object *info , const char *commands)
-{
-	char *s2, *t;	/* temporary variables */
-	char *s1 = strdup(commands);
-	struct info_field *fld;
-	pkg_fld_name name;
-
-	t = s1;
-
-	while ((s2 = strsep(&t, ",")) != NULL) {
-		name = info_fld_name(s2);
-
-		if (name == fld_NULL)
-			break;
-
-		fld = info_get_fld(info, info_fld_name(s2));
-		if (fld->fld_type == fld_type_str)
-			printf("%s: %s\n", s2, fld->str);
-		else
-			printf("%s: %d\n", s2, fld->num);
-	}
-
-	free(s1);
-}
-
 /*!	@brief Behaves like strsep but matches entire \b s2. */
 static char *_strsep(char **s1, const char *s2)
 {
@@ -263,4 +234,33 @@ struct info_field *info_get_fld(const info_object *iobj, pkg_fld_name name)
 		prog_name, fld_map[name].str);
 
 	return NULL;
+}
+
+/* "all,package,maintainer" */
+/* options all, package, maintainer, architechture, version, dependancy, home,
+ * release, description, installed-size
+ */
+void info_print(const info_object *info , const char *commands)
+{
+	char *s2, *s3, *s1;
+	struct info_field *fld;
+	pkg_fld_name name;
+
+	s1 = strdup(commands);
+	s3 = s1;
+
+	while ((s2 = strsep(&s3, ",")) != NULL) {
+		name = info_fld_name(s2);
+
+		if (name == fld_NULL)
+			break;
+
+		fld = info_get_fld(info, info_fld_name(s2));
+		if (fld->fld_type == fld_type_str)
+			printf("%s: %s\n", s2, fld->str);
+		else
+			printf("%s: %d\n", s2, fld->num);
+	}
+
+	free(s1);
 }
