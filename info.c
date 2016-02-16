@@ -52,17 +52,27 @@ static struct info_field *info_new_field(char *str);
  */
 void info_print(const info_object *info , const char *commands)
 {
-	char *s2;
+	char *s2, *t;	/* temporary variables */
 	char *s1 = strdup(commands);
 	struct info_field *fld;
+	pkg_fld_name name;
 
-	while ((s2 = strsep(&s1, ",")) != NULL) {
+	t = s1;
+
+	while ((s2 = strsep(&t, ",")) != NULL) {
+		name = info_fld_name(s2);
+
+		if (name == fld_NULL)
+			break;
+
 		fld = info_get_fld(info, info_fld_name(s2));
 		if (fld->fld_type == fld_type_str)
 			printf("%s: %s\n", s2, fld->str);
 		else
 			printf("%s: %d\n", s2, fld->num);
 	}
+
+	free(s1);
 }
 
 /*!	@brief Behaves like strsep but matches entire \b s2. */
