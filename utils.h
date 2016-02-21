@@ -10,7 +10,7 @@
 
 #define MAX_READ_BUFF 65536
 #define SYS_ARCH "amd64"
-#define SYS_CODENAME "navam"
+#define OS_CODENAME "navam"
 #define MPKG_EXTENSION "mav"
 
 #ifdef DEBUG___
