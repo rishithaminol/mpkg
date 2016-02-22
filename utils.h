@@ -23,6 +23,22 @@
 		printf("[DEBUG] %d: %s() %s PASSED\n", __LINE__, __FUNCTION__, __FILE__);
 #endif
 
+#define STRIP_MULTIPLE_FRW_SLASHES(STR) \
+{\
+	int i = 0, j;	\
+\
+	while (STR[i] != '\0') {	\
+		if (STR[i] == '/')	\
+			if (STR[i + 1] == '/') {	\
+				for (j = i + 1; STR[j] != '\0'; j++)	\
+					STR[j] = STR[j + 1];	\
+				continue;	\
+			}	\
+\
+		i++;	\
+	}	\
+}
+
 extern int file_exist(const char *filename);
 extern int regcomp_e_(regex_t *preg, const char *expr);
 extern int regexec_(const regex_t *preg, const char *string,
