@@ -104,32 +104,33 @@ static void copy_hlink(const FTSENT *f, const char *dest)
 void copy(const char *src, const char *dest)
 {
 	int src_root_len;
-	char *src_root = NULL;
+	/*char *src_root = NULL;*/
 	FTSENT *file = NULL;
 	FTS *file_system;
 	char **s = (char **)malloc(sizeof(char **) * 2);
 	char a[PATH_MAX];
-	char trslash[2] = "";
+	/*char trslash[2] = "";*/
 
 	*s = (char *const)src;
 	*(s + 1) =  NULL;
 	file_system = fts_open(s, FTS_COMFOLLOW | FTS_NOCHDIR |
 		    FTS_PHYSICAL, &fts_compare);
 
-	if (dest[strlen(dest) - 1] != '/')
-		strcpy(trslash, "/");
+	/*if (dest[strlen(dest)] != '/')
+		strcpy(trslash, "/");*/
+	src_root_len = strlen(src);
 
 	while ((file = fts_read(file_system)) != NULL) {
 		/* identify the source root */
-		if ((file->fts_level == 0) && (src_root == NULL)) {
-			src_root = file->fts_path;
-			src_root_len = strlen(src_root);
+		if ((file->fts_level == 0)/* && (src_root == NULL)*/) {
+			/*src_root = file->fts_path;
+			src_root_len = strlen(src_root);*/
 			continue;
 		}
 
 		if (file->fts_errno == 0)
-			sprintf(a, "%s%s%s", 
-				dest, trslash, file->fts_path + src_root_len);
+			sprintf(a, "%s%s",
+				dest, /*trslash,*/ file->fts_path + src_root_len);
 		else
 			printf("warning: '%s'\n", file->fts_path);
 
