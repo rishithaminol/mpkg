@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 	/* there should be control directory handlers */
 	/* after extraction there sould be pre install function handle */
 
-	copy(TMP_DATA_DIR, prefix);
+	copy(TMP_DATA_DIR, prefix, NULL, NULL);
 
 	/* after copying there sould be post installation function handle */
 clean_out:
