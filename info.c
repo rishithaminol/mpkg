@@ -35,7 +35,7 @@ static struct mav_rules {
 	{"architecture"		,fld_type_str},
 	{"version"			,fld_type_str},
 	{"release"			,fld_type_str},
-	{"installed-size"	,fld_type_int},
+	{"installed-size"	,fld_type_str},
 	{"dependancies"		,fld_type_str},
 	{"homepage"			,fld_type_str},
 	{"description"		,fld_type_str}
@@ -143,10 +143,6 @@ static struct info_field *info_new_field(char *str)
 		info_fld->fld_type = fld_map[info_fld->fld_name].fld_type;
 
 	switch (info_fld->fld_type) {
-		case fld_type_int:
-			info_fld->num = atoi(val);
-			break;
-
 		case fld_type_str:
 			info_fld->str = val;
 			break;
@@ -258,8 +254,6 @@ void info_print(const info_object *info , const char *commands)
 		fld = info_get_fld(info, info_fld_name(s2));
 		if (fld->fld_type == fld_type_str)
 			printf("%s: %s\n", s2, fld->str);
-		else
-			printf("%s: %d\n", s2, fld->num);
 	}
 
 	free(s1);

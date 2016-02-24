@@ -21,17 +21,13 @@ typedef enum pkg_fld_name {
 /*!	@brief field types */
 typedef enum pkg_fld_type {
 	fld_type_nul,	/*!< @brief "" (no value) */
-	fld_type_int,	/*!< @brief number */
 	fld_type_str,	/*!< @brief string */
 } pkg_fld_type;
 
 /*!	@brief to store field data */
 struct info_field {
 	pkg_fld_name 	fld_name;		/*!< @brief field key */
-	union {
-		unsigned int num;			/*!< @brief number */
-		char *str;					/*!< @brief string */
-	};
+	char *str;					/*!< @brief string */
 	pkg_fld_type 	fld_type;		/*!< @brief field type */
 	struct info_field *next;
 };
