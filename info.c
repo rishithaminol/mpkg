@@ -5,6 +5,9 @@
  *			list. Using this we can keep multiple info
  *			objects in memory.
  *			options DEBUG___
+ *	@todo Some description texts has quotation marks so they need
+ *			to be escaped in this section. This mechanism
+ *			should affect description field only.
  */
 #include <stdio.h>
 #include <string.h>
