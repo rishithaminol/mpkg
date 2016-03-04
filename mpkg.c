@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
 {
 	int ret, c;
 	ar_object *ar1;
+	info_object *info;
 
 	prog_name = *argv;
 
@@ -129,16 +130,14 @@ int main(int argc, char *argv[])
 
 	/* if archive open fail 'goto clean_out' */
 	ar1 = ar_open(archive);
-	if (ar1 == NULL)	goto clean_out;
+	if (ar1 == NULL)
+		goto clean_out;
+	ar_grab(ar1, "info", _get_info);
+	info = info_load(temp_str);
 
 	if (infoflag > 0) {	/* if '--info' used */
-		info_object *info;
-
 		printf("info details\n");
-		ar_grab(ar1, "info", _get_info);
-		info = info_load(temp_str);
 		info_print(info, argv[infoflag]);
-		info_unload(info);
 		goto clean_out;
 	}
 
@@ -154,6 +153,7 @@ int main(int argc, char *argv[])
 	/* after copying there sould be post installation function handle */
 clean_out:
 	ar_close(ar1);
+	info_unload(info);
 	clean_temps ? remove_tmpdir(TMP_DIR) : FALSE;
 
 	return 0;
