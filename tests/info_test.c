@@ -26,6 +26,16 @@ static void _get_info(char *str, int n)
 	count++;
 }
 
+/* "all,package,maintainer" */
+/* options all, package, maintainer, architechture, version, dependancy, home,
+ * release, description, installed-size
+ */
+void *info_print(info_object *info, const char *commands)
+{
+	struct info_field *fld_;
+
+}
+
 int main(int argc, char *argv[])
 {
 	ar_object *ar1;
