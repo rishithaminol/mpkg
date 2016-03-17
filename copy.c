@@ -102,7 +102,7 @@ static void copy_hlink(const FTSENT *f, const char *dest)
 }
 
 void copy(const char *src, const char *dest,
-	void *clb_opt, void (*callback)(void *clb_opt, char *str))
+	void *opt_, void (*callback)(void *clb_opt, char *str))
 {
 	int src_root_len;
 	FTSENT *file = NULL;
@@ -126,7 +126,7 @@ void copy(const char *src, const char *dest,
 			sprintf(a, "%s%s",
 				dest, file->fts_path + src_root_len);
 			if (callback != NULL)
-				callback(clb_opt, a);
+				callback(opt_, a);
 		} else {
 			printf("warning: '%s'\n", file->fts_path);
 		}
