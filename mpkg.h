@@ -9,9 +9,9 @@
 
 #ifndef CUSTOM_TEMP_LOCATION
 #define TMP_DIR "/tmp/mpkg"
+#endif
 #define TMP_DATA_DIR path_append(TMP_DIR, "data")
 #define TMP_CONFIG_DIR path_append(TMP_DIR, "config")
-#endif
 
 extern char prefix[4096];
 extern char *prog_name;
