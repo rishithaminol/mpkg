@@ -105,3 +105,15 @@ char *path_append(const char *p1, const char *p2)
 
 	return p_app + p_app_len - cur_len;
 }
+
+/* @brief String appending
+ * @param[in] str1 Source string.
+ * @param[in] str2 String to be appended.
+ * @todo This function will only work with malloced
+ *			variables.
+ */
+void strappend(char **str1, const char *str2)
+{
+	*str1 = (char *)realloc(*str1, strlen(*str1) + strlen(str2) + 1);
+	strcat(*str1, str2);
+}

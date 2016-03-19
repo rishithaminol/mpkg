@@ -46,5 +46,6 @@ extern int regcomp_e_(regex_t *preg, const char *expr);
 extern int regexec_(const regex_t *preg, const char *string,
 	ssize_t nmatch, regmatch_t *pmatch);
 extern char *path_append(const char *p1, const char *p2);
+extern void strappend(char **str1, const char *str2);
 
 #endif /* UTILS_H */
