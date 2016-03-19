@@ -5,8 +5,12 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <regex.h>
+#include <string.h>
 
 #include "mpkg.h"
+#include "utils.h"
+
+char p_app[65536];	/* path append string */
 
 /*! @brief check the exsistance of a file.
  *  @return return 0 on success. Otherwise return
@@ -75,4 +79,29 @@ int regexec_(const regex_t *preg, const char *string,
 	}
 
 	return 0;
+}
+
+/*! @brief Appends two pathnames
+ *
+ *	Using \bp_app global variable this function append new strings
+ *	which are ending at '\0' charachter and return the appended
+ *	string's first address. Following example will print only
+ *	"Hello".
+ *	+---+---+----+---+---+---+---+---+---+---+----+---+---+
+ *	| l | o | \0 | / | e | t | c | / | d | b | \0 | / | u |
+ *	+---+---+----+---+---+---+---+---+---+---+----+---+---+
+ *	               ^
+ */
+char *path_append(const char *p1, const char *p2)
+{
+	static int p_app_len = 0;
+	int cur_len;	/*current len*/
+
+	/* length of '/' + strlen(p1) + strlen(p2) + null charachter */
+	cur_len = (strlen(p1) + strlen(p2) + 2);
+	p_app_len += cur_len;
+
+	sprintf(p_app + p_app_len - cur_len, "%s/%s", p1, p2);
+
+	return p_app + p_app_len - cur_len;
 }
