@@ -122,30 +122,29 @@ void copy(const char *src, const char *dest,
 		if (file->fts_level == 0)
 			continue;
 
-		if (file->fts_errno == 0) {
+		if (file->fts_errno == 0)
 			sprintf(a, "%s%s",
 				dest, file->fts_path + src_root_len);
-			if (callback != NULL)
-				callback(opt_, a);
-		} else {
+		else
 			printf("warning: '%s'\n", file->fts_path);
-		}
 
 		switch (file->fts_info) {
 		case FTS_D:
 			/* ENOENT - no such file or directory */
 			if (file_exist(a) == ENOENT)
 				mkdir(a, file->fts_statp->st_mode);
+			(callback != NULL) ? callback(opt_, a) : FALSE;
 			break;
 		case FTS_F:
 		case FTS_SL:
-		case FTS_SLNONE:
+		case FTS_SLNONE:	/* A symbolic link with a nonexistent target. */
 			if (file->fts_statp->st_nlink > 1)
 				copy_hlink(file, a);
 			else if (file->fts_info == FTS_F)
 				copy_file(file, a);
 			else
 				copy_link(file, a);
+			(callback != NULL) ? callback(opt_, a) : FALSE;
 			break;
 		}
 	}
