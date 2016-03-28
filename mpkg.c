@@ -41,7 +41,9 @@ struct option longopts[] = {
 static int tar_extract(const char *src, const char *dest);
 static void prepare_tempds(void);
 
-/*! @brief Update temp_str */
+/*! @brief used by ar_grab()
+ *	This function updatest temp_str string.
+ */
 static void _get_info(char *str, int n)
 {
 	static int count = 0;
