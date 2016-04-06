@@ -163,15 +163,15 @@ int main(int argc, char *argv[])
 	/* there should be control directory handlers */
 	/* after extraction there sould be pre install function handle */
 
-/* file copying to the prefix */
+	/* file copying to the prefix */
 	/* copy log */
-	int fd = open(path_append(".", (info_get_fld(info, fld_pkg))->str), O_WRONLY|O_CREAT|O_EXCL,
+	int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str), O_WRONLY|O_CREAT|O_EXCL,
 		S_IRUSR|S_IWUSR);
 	copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log);
 
-/* Database update section */
+	/* Database update section */
 	db = open_main_db();
-	update_db(db, info, path_append(".", (info_get_fld(info, fld_pkg))->str));
+	update_db(db, info, path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str));
 
 	/* after copying there sould be post installation function handle */
 wind_up:
