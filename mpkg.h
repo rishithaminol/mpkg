@@ -1,13 +1,20 @@
 #ifndef MPKG_H
 #define MPKG_H
 
-#ifndef MPKG_DB_
-#define MPKG_DB_ "/var/lib/mpkg/mpkg.db"
-#endif
-
 #include "utils.h"
 
-#ifndef CUSTOM_TEMP_LOCATION
+/* testing purpose */
+#define ADMINISTRATIVE_DIR "."
+#ifndef ADMINISTRATIVE_DIR
+#define ADMINISTRATIVE_DIR "/var/lib/mpkg"
+#endif
+
+#ifndef MPKG_DB_
+#define MPKG_DB_ path_append(ADMINISTRATIVE_DIR, "/mpkg.db")
+#endif
+
+
+#ifndef TMP_DIR
 #define TMP_DIR "/tmp/mpkg"
 #endif
 #define TMP_DATA_DIR path_append(TMP_DIR, "data")
