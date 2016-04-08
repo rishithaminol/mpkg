@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>603</x>
+      <y>225</y>
+      <w>252</w>
+      <h>279</h>
+    </coordinates>
+    <panel_attributes>*installed*
+--
+     Index: INTEGER PRIMARY KEY
+     pkgID: INTEGER
+  pkgMaint: TEXT
+   pkgArch: TEXT
+    pkgVer: TEXT
+    pkgDep: TEXT
+   pkgHome: TEXT
+pkgRelease: TEXT
+    pkgDes: TEXT
+installedSize: TEXT
+installLog: TEXT
+actionDate: Current date-time
+--
+This is the database of
+installed packages. This
+file is different computer
+to computer.
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>306</x>
+      <y>108</y>
+      <w>234</w>
+      <h>153</h>
+    </coordinates>
+    <panel_attributes>*all_pkgs*
+--
+pkgID: INTEGER PRIMARY KEY
+pkgName: TEXT
+pkgBranch: TEXT
+pkgDes: TEXT
+actionDate: Current date-time
+--
+This is the table of all
+packages available.
+Managed by OS maintainers.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>603</x>
+      <y>0</y>
+      <w>252</w>
+      <h>207</h>
+    </coordinates>
+    <panel_attributes>*OScodename_&lt;&lt;Branch&gt;&gt;*
+--
+     Index: INTEGER PRIMARY KEY
+     pkgID: INTEGER
+   pkgArch: TEXT
+    pkgVer: TEXT
+pkgRelease: TEXT
+    pkgDep: TEXT
+    md5sum: TEXT
+actionDate: Current date-time
+--
+This is the table of
+available updates for the
+current 'OScodename_&lt;&lt;branch&gt;&gt;'.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>531</x>
+      <y>36</y>
+      <w>90</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;</panel_attributes>
+    <additional_attributes>10.0;110.0;81.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>531</x>
+      <y>126</y>
+      <w>90</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>891</x>
+      <y>387</y>
+      <w>90</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>Installed Date-Time.
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>846</x>
+      <y>396</y>
+      <w>63</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;20.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>891</x>
+      <y>126</y>
+      <w>90</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>Updated Date-Time.
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>846</x>
+      <y>126</y>
+      <w>63</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>135</x>
+      <y>180</y>
+      <w>90</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>Package implimented Date-Time.
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>216</x>
+      <y>189</y>
+      <w>108</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>459</x>
+      <y>576</y>
+      <w>126</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*_branch_*
+--
+core
+base
+desktop
+extra
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>495</x>
+      <y>693</y>
+      <w>324</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>*_ISO_*
+--
+maavee-2.2.1-server-amd64.iso
+maavee-2.2.1-desktop-amd64.iso
+--
+maavee-2.2.1_testing-server-amd64.iso
+maavee-2.2.1_testing-desktop-amd64.iso
+layer=1
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>441</x>
+      <y>531</y>
+      <w>396</w>
+      <h>279</h>
+    </coordinates>
+    <panel_attributes>Maavee (1.0.1) Shradha
+--
+
+bg=orange
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>27</x>
+      <y>567</y>
+      <w>180</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>On unpredictable and
+critical changes.
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>198</x>
+      <y>585</y>
+      <w>261</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>45</x>
+      <y>306</y>
+      <w>126</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*_branch_*
+--
+core
+base
+desktop
+extra
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>81</x>
+      <y>423</y>
+      <w>324</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>*_ISO_*
+--
+maavee-2.2-server-amd64.iso
+maavee-2.2-desktop-amd64.iso
+--
+maavee-2.2_testing-server-amd64.iso
+maavee-2.2_testing-desktop-amd64.iso
+layer=1
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>27</x>
+      <y>261</y>
+      <w>396</w>
+      <h>279</h>
+    </coordinates>
+    <panel_attributes>Maavee (1.0) Navam
+--
+
+bg=orange
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>63</x>
+      <y>108</y>
+      <w>117</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>Short description about package.
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>171</x>
+      <y>126</y>
+      <w>153</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>150.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>54</x>
+      <y>657</y>
+      <w>252</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>_Package Name_
+--
+name-version-release.arch.mav</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>36</x>
+      <y>756</y>
+      <w>324</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>/var/lib/mpkg/mpkg.db
+/var/lib/mpkg/all_pkgs.db
+/var/lib/mpkg/&lt;&lt;OS_codename&gt;&gt;_core
+/var/lib/mpkg/&lt;&lt;OS_codename&gt;&gt;_testing
+/var/lib/mpkg/&lt;&lt;OS_codename&gt;&gt;_extra
+/var/lib/mpkg/install-logs
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
