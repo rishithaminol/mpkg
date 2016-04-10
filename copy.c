@@ -53,7 +53,7 @@ static void copy_file(const FTSENT *f, const char *dest_path)
 	close(src_fd);
 }
 
-/*!< @brief copy symlinks
+/*! @brief copy symlinks
  *
  *	@todo Path determinations may not work correctly.
  *			Check symlink's manual oldpath section.
