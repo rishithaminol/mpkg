@@ -17,7 +17,7 @@
 #include "utils.h"	/* MAX_READ_BUFF */
 
 #ifdef DEBUG___
-#define NODE_PRINT(X)							\
+#define AR_HDR_PRINT(X)							\
 	printf("%s\n", (X)->ar_name);				\
 	printf("\tdate %d\n", (int)(X)->ar_date);	\
 	printf("\tuid %d\n", (int)(X)->ar_uid);		\
@@ -226,7 +226,7 @@ static struct ar_hdr_ *ar_headers(int fd)
 		PRINTF_INT(count++);
 		PRINTF_INT(n);
 		PRINTF_STRING(header);
-		NODE_PRINT(*tt);
+		AR_HDR_PRINT(*tt);
 #endif
 		tt = &((*tt)->next);
 	}
