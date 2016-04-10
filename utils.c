@@ -85,12 +85,14 @@ int regexec_(const regex_t *preg, const char *string,
  *
  *	Using \bp_app global variable this function append new strings
  *	which are ending at '\0' charachter and return the appended
- *	string's first address. Following example will print only
+ *	string's first address. Following example will point only
  *	"/etc/db".
- *	+---+---+----+---+---+---+---+---+---+---+----+---+---+
- *	| l | o | \0 | / | e | t | c | / | d | b | \0 | / | u |
- *	+---+---+----+---+---+---+---+---+---+---+----+---+---+
- *	               ^
+ *  \verbatim
+	+---+---+----+---+---+---+---+---+---+---+----+
+	| l | o | \0 | / | e | t | c | / | d | b | \0 |
+	+---+---+----+---+---+---+---+---+---+---+----+
+	               ^
+   \endverbatim
  */
 char *path_append(const char *p1, const char *p2)
 {
