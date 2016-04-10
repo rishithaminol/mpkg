@@ -57,7 +57,8 @@ static void copy_file(const FTSENT *f, const char *dest_path)
  *
  *	@todo Path determinations may not work correctly.
  *			Check symlink's manual oldpath section.
- *			oldpath may lead to incorrect targets.
+ *			oldpath may lead to incorrect targets if we change
+ *			prefix(destination of installation).
  */
 static void copy_link(const FTSENT *f, const char *dest_path)
 {
