@@ -1,7 +1,7 @@
 #ifndef MPKG_H
 #define MPKG_H
 
-#include "utils.h"
+#include "utils.h" /* path_append() */
 
 /* testing purpose */
 #define ADMINISTRATIVE_DIR "."
