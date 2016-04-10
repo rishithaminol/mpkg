@@ -32,13 +32,13 @@ typedef struct ar_object {
 	struct ar_hdr_ *ar_hdr_table;
 } ar_object;
 
-static struct ar_hdr_ *allocate_node(void);
+static struct ar_hdr_ *allocate_header(void);
 static struct ar_hdr_ *ar_new_header(const char *header);
 static struct ar_hdr_ *ar_headers(int fd);
 static int ar_test(int fd);
 static int ar_free(struct ar_hdr_ *z);
 
-static struct ar_hdr_ *allocate_node(void)
+static struct ar_hdr_ *allocate_header(void)
 {
 	return (struct ar_hdr_ *)malloc(sizeof(struct ar_hdr_));
 }
@@ -51,7 +51,7 @@ static struct ar_hdr_ *ar_new_header(const char *header)
 	int i;
 	char fname_part[16];
 	char *endptr;
-	struct ar_hdr_ *t = allocate_node();
+	struct ar_hdr_ *t = allocate_header();
 
 	strncpy(fname_part, header, 16);
 	if (strchr(fname_part, '/') == NULL) {	/* header checking */
