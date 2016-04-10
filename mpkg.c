@@ -25,7 +25,7 @@ char *prog_name = NULL;	/*!< @brief Program name. */
 char *archive = NULL;	/*!< @brief Archive path currently in use */
 
 /* flag variables */
-int iflag, rflag = 0;
+int iflag, rflag = 1;
 static int infoflag = 0;
 static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 	while ((c = getopt_long(argc, argv, "i:r:hV", longopts, NULL)) != -1) {
 		switch (c) {
 		case 'i':
-			iflag = 1;
+			iflag = 0;
 			archive = optarg;
 			break;
 		case 'r':
@@ -121,12 +121,12 @@ int main(int argc, char *argv[])
 	}
 
 	/* if root is not given */
-	if (rflag == 0)
+	if (rflag)
 		strcpy(prefix, "/");
 
 	/* if root is given */
 	ret = file_exist(prefix);
-	if ((rflag == 1) && (ret != 0)) {
+	if (rflag && (ret != 0)) {
 		fprintf(stderr, "%s: '%s' %s\n", prog_name, prefix, strerror(ret));
 		exit(EXIT_FAILURE);
 	}
