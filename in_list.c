@@ -1,7 +1,7 @@
-/* This program handle an inode table for the purpose of
- * copying hard links all functions are prefixed with in_
+/* This program handles an inode table for the purpose of
+ * copying hard links. all functions are prefixed with in_.
  * all the features in this file is used by
- * copy.c:copy_hlink() only
+ * copy.c:copy_hlink() only.
  */
 
 #include <stdio.h>
