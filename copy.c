@@ -132,7 +132,8 @@ void copy(const char *src, const char *dest,
 			sprintf(a, "%s%s",
 				dest, file->fts_path + src_root_len);
 		else
-			printf("warning: '%s'\n", file->fts_path);
+			fprintf(stderr, "%s: '%s' Warning\n", prog_name,
+				file->fts_path);
 
 		switch (file->fts_info) {
 		case FTS_D:
