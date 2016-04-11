@@ -20,6 +20,9 @@
 
 char temp_str[4096];
 
+/* globals for the entire program. Programmers can use
+ * thes variables directly
+ */
 char prefix[4096];		/*!< @brief Prefix path (destination installation) */
 char *prog_name = NULL;	/*!< @brief Program name. */
 char *archive = NULL;	/*!< @brief Archive path currently in use */
@@ -89,7 +92,7 @@ int main(int argc, char *argv[])
 			archive = optarg;
 			break;
 		case 'r':
-			rflag = 1;
+			rflag = 0;
 			/*prefix = optarg;*/
 			strcpy(prefix, optarg);
 			break;
