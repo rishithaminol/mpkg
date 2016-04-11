@@ -73,7 +73,7 @@ static void copy_link(const FTSENT *f, const char *dest_path)
 		unlink(dest_path);
 
 	if (symlink(pointed_path, dest_path) == -1) {
-		printf("%s: '%s' Warning %s\n", prog_name, __func__,
+		fprintf(stderr, "%s: '%s' Warning %s\n", prog_name, __func__,
 			strerror(errno));
 	}
 }
