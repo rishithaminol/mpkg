@@ -45,7 +45,7 @@ char *archive_name(sqlite3 *db, const char *name)
 		name);
 
 	if (sqlite3_prepare_v2(db, sql_1, -1, &res_1, 0) != SQLITE_OK) {
-		printf("can't retraive 1 data: %s\n", sqlite3_errmsg(db));
+		fprintf(stderr, "can't retraive 1 data: %s\n", sqlite3_errmsg(db));
 		return NULL;
 	}
 
@@ -66,7 +66,7 @@ char *archive_name(sqlite3 *db, const char *name)
 		OS_CODENAME, pkgBranch, SYS_ARCH, pkgID);
 
 	if (sqlite3_prepare_v2(db, sql_2, -1, &res_2, 0) != SQLITE_OK) {
-		printf("can't retraive 2 data: %s\n", sqlite3_errmsg(db));
+		fprintf(stderr, "can't retraive 2 data: %s\n", sqlite3_errmsg(db));
 		return NULL;
 	}
 
@@ -97,7 +97,7 @@ int get_pkgID(sqlite3 *db, const char *str)
 		str);
 
 	if (sqlite3_prepare_v2(db, sql_1, -1, &res_1, 0) != SQLITE_OK) {
-		printf("Can't retraive data: %s\n", sqlite3_errmsg(db));
+		fprintf(stderr, "Can't retraive data: %s\n", sqlite3_errmsg(db));
 		sqlite3_free(sql_1);
 		return -1;
 	}
@@ -105,7 +105,7 @@ int get_pkgID(sqlite3 *db, const char *str)
 	if (sqlite3_step(res_1) == SQLITE_ROW) {
 		pkg_id = sqlite3_column_int(res_1, 0);
 	} else {
-		printf("Sorry, we don't know what '%s' is.\n", str);
+		fprintf(stderr, "Sorry, we don't know what '%s' is.\n", str);
 		sqlite3_free(sql_1);
 		sqlite3_finalize(res_1);
 		return -1;
@@ -135,7 +135,7 @@ int is_installed(sqlite3 *db, const char *str)
 		pkg_id);
 
 	if (sqlite3_prepare_v2(db, sql_2, -1, &res_2, 0) != SQLITE_OK) {
-		printf("Can't retraive 2 data: %s\n", sqlite3_errmsg(db));
+		fprintf(stderr, "Can't retraive 2 data: %s\n", sqlite3_errmsg(db));
 		return -1;
 	}
 

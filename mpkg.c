@@ -194,7 +194,7 @@ static int tar_extract(const char *src, const char *dest)
 	sprintf(cmd, "/bin/tar -xf %s -C %s", src, dest);
 
 	if (system(cmd) != 0) {
-		printf("%s: error occured while extracting '%s'\n", prog_name, src);
+		fprintf(stderr, "%s: error occured while extracting '%s'\n", prog_name, src);
 		return -1;
 	}
 
