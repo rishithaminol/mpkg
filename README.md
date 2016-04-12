@@ -5,12 +5,6 @@ The Maavee mpkg package manager is a tool for get informations about
 systems. LFS systems does not have package managers that is why we
 use this tool to manage packages under an LFS system.
 
-### What is this repository for? ###
-
-* Quick summary
-* This is the on going version.
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
 ### How do I get set up? ###
 
 * Summary of set up
@@ -39,10 +33,14 @@ Please folow linux kernel coding style
 <https://www.kernel.org/doc/Documentation/CodingStyle>.
 It is the most widely used coding style in C programming.
 
+
+### What is this repository for? ###
+* Quick summary
+* This is the on going version.
+* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+
 * you should enter new line at the end of every source file.
 
 ### Contacts ###
 
-If you want to be informed about new code releases, bug fixes,
-security fixes, general news and information please use
-<rishithaminol@gmail.com>
+If someone wants to contact me please use <rishithaminol@gmail.com>
