@@ -17,6 +17,7 @@
 #include "info.h"
 #include "sqlfrms.h"
 #include "version.h"
+#include "mpkg_err.h"
 
 char temp_str[4096];
 
@@ -80,8 +81,10 @@ int main(int argc, char *argv[])
 
 	prog_name = *argv;
 
-	if (argc < 2)
+	if (argc < 2) {
+		mpkg_err_warn("Too few arguments");
 		mpkg_usage(EXIT_FAILURE);
+	}
 
 	opterr = 0; /* no getopt_long() error reports */
 
