@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	prog_name = *argv;
 
 	if (argc < 2) {
-		mpkg_err_warn("Too few arguments");
+		mpkg_err_warn(mpkg_err_error, "too few arguments");
 		mpkg_usage(EXIT_FAILURE);
 	}
 
