@@ -33,7 +33,7 @@ int iflag, rflag = 1;
 static int infoflag = 0;
 static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
-	{"install",		required_argument,	NULL,			'i'},
+	{"package",		required_argument,	NULL,			'p'},
 	{"root",		required_argument,	NULL,			'r'},
 	{"keep-temp",	no_argument,		&clean_temps,	  0},
 	{"help",		no_argument,		NULL,			'h'},
@@ -88,9 +88,9 @@ int main(int argc, char *argv[])
 
 	opterr = 0; /* no getopt_long() error reports */
 
-	while ((c = getopt_long(argc, argv, "i:r:hV", longopts, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "p:r:hV", longopts, NULL)) != -1) {
 		switch (c) {
-		case 'i':
+		case 'p':
 			iflag = 0;
 			archive = optarg;
 			break;
@@ -171,13 +171,14 @@ int main(int argc, char *argv[])
 
 	/* file copying to the prefix */
 	/* copy log */
-	int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str), O_WRONLY|O_CREAT|O_EXCL,
-		S_IRUSR|S_IWUSR);
+	int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str),
+		O_WRONLY|O_CREAT|O_EXCL, S_IRUSR|S_IWUSR);
 	copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log);
 
 	/* Database update section */
 	db = open_main_db();
-	update_db(db, info, path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str));
+	update_db(db, info, path_append(ADMINISTRATIVE_DIR,
+		(info_get_fld(info, fld_pkg))->str));
 
 	/* after copying there sould be post installation function handle */
 wind_up:
@@ -221,7 +222,7 @@ void mpkg_usage(int exit_status)
 	printf(
 		"Usage: %s [OPTIONS] [PACKAGE NAME]\n\n" \
 		"Options\n" \
-		" -i, --install    install given package\n" \
+		" -p, --package    install given package\n" \
 		" -r, --root       prefix\n" \
 		"     --keep-temp  keep temp files\n" \
 		"     --info       print package infomation.\n" \
