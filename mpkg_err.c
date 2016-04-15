@@ -10,33 +10,51 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "mpkg.h"
 #include "mpkg_err.h"
 
 #ifdef DEBUG___
-extern void mpkg_err(char *section, const char *func,
-	int line_num, error_type er_type, const char *err_str)
+void mpkg_err1(char *section, const char *func,	int line_num,
+	const char *err_str, ...)
 #else
-extern void mpkg_err(error_type er_type, const char *err_str)
+void mpkg_err1(const char *err_str, ...)
 #endif
 {
-	char type_str[10];
-
-	switch (er_type) {
-		case mpkg_err_error:
-			strcpy(type_str, "error");
-			break;
-
-		case mpkg_err_warning:
-			strcpy(type_str, "warning");
-			break;
-	}
+	va_list args;
+	char debug_string[256] = "";
+	char temp_string[4096];
 
 #ifdef DEBUG___
-	fprintf(stderr, "%s:%s:%s:%d %s: %s\n", prog_name,
-		section, func, line_num, type_str, err_str);
-#else
-	fprintf(stderr, "%s: %s: %s\n", prog_name, type_str, err_str);
+	sprintf(debug_string, "%s:%s:%d", section, func, line_num);
 #endif
+
+	va_start(args, err_str);
+	vsprintf(temp_string, err_str, args);
+	va_end(args);
+
+	fprintf(stderr, "%s:%s error: %s\n", prog_name, debug_string, temp_string);
+}
+
+#ifdef DEBUG___
+void mpkg_err2(char *section, const char *func,	int line_num,
+	const char *warn_str, ...)
+#else
+void mpkg_err2(const char *warn_str, ...)
+#endif
+{
+	va_list args;
+	char debug_string[256] = "";
+	char temp_string[4096];
+
+#ifdef DEBUG___
+	sprintf(debug_string, "%s:%s:%d", section, func, line_num);
+#endif
+
+	va_start(args, warn_str);
+	vsprintf(temp_string, warn_str, args);
+	va_end(args);
+
+	fprintf(stderr, "%s:%s warning: %s\n", prog_name, debug_string, temp_string);
 }

@@ -53,8 +53,7 @@ static void _get_info(char *str, int n)
 	static int count = 0;
 
 	if (count > 0) {
-		fprintf(stderr, "%s: info file size is larger than the default\n",
-			prog_name);
+		mpkg_err("info file size is larger than the default\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -82,7 +81,7 @@ int main(int argc, char *argv[])
 	prog_name = *argv;
 
 	if (argc < 2) {
-		mpkg_err_warn(mpkg_err_error, "too few arguments");
+		mpkg_err("too few arguments");
 		mpkg_usage(EXIT_FAILURE);
 	}
 
@@ -107,14 +106,12 @@ int main(int argc, char *argv[])
 			exit(EXIT_SUCCESS);
 			break;
 		case ':':
-			fprintf(stderr, "%s: option '%s' requires an argument\n", 
-				prog_name, argv[optind - 1]);
+			mpkg_err("option '%s' requires an argument\n", argv[optind - 1]);
 			exit(EXIT_FAILURE);
 			break;
 		case '?':
 		/*default:*/
-			fprintf(stderr, "%s: option '%s' is invalid\n", 
-				prog_name, argv[optind - 1]);
+			mpkg_err("option '%s' is invalid\n", argv[optind - 1]);
 			exit(EXIT_FAILURE);
 			break;
 		case 1:
@@ -133,7 +130,7 @@ int main(int argc, char *argv[])
 	/* if root is given */
 	ret = file_exist(prefix);
 	if (rflag && (ret != 0)) {
-		fprintf(stderr, "%s: '%s' %s\n", prog_name, prefix, strerror(ret));
+		mpkg_err("'%s' %s\n", prefix, strerror(ret));
 		exit(EXIT_FAILURE);
 	}
 
@@ -143,7 +140,7 @@ int main(int argc, char *argv[])
 
 	/* check existance of the archive */
 	if ((ret = file_exist(archive))) {
-		fprintf(stderr, "%s: '%s' %s\n", prog_name, archive, strerror(ret));
+		mpkg_err("'%s' %s\n", archive, strerror(ret));
 		exit(EXIT_FAILURE);
 	}
 
@@ -198,7 +195,7 @@ static int tar_extract(const char *src, const char *dest)
 	sprintf(cmd, "/bin/tar -xf %s -C %s", src, dest);
 
 	if (system(cmd) != 0) {
-		fprintf(stderr, "%s: error occured while extracting '%s'\n", prog_name, src);
+		mpkg_err("error occured while extracting '%s'\n", src);
 		return -1;
 	}
 

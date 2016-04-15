@@ -17,6 +17,7 @@
 
 #include "copy.h"
 #include "utils.h"
+#include "mpkg_err.h"
 
 /* global in_list (inode list)
  * this is only for "copy.o"
@@ -72,10 +73,8 @@ static void copy_link(const FTSENT *f, const char *dest_path)
 	if (file_exist(dest_path) == 0)
 		unlink(dest_path);
 
-	if (symlink(pointed_path, dest_path) == -1) {
-		fprintf(stderr, "%s: '%s' Warning %s\n", prog_name, __func__,
-			strerror(errno));
-	}
+	if (symlink(pointed_path, dest_path) == -1)
+		mpkg_warn("%s\n", strerror(errno));
 }
 
 /* copy hard links using in_list linked struct.
@@ -132,8 +131,7 @@ void copy(const char *src, const char *dest,
 			sprintf(a, "%s%s",
 				dest, file->fts_path + src_root_len);
 		else
-			fprintf(stderr, "%s: '%s' Warning\n", prog_name,
-				file->fts_path);
+			mpkg_warn("'%s'\n", file->fts_path);
 
 		switch (file->fts_info) {
 		case FTS_D:
@@ -179,7 +177,7 @@ void remove_tmpdir(const char *f)
 	tmp_errno = errno;
 
 	if (p == NULL) {
-		fprintf(stderr, "%s: %s %s\n", prog_name, f, strerror(tmp_errno));
+		mpkg_err("%s %s\n", f, strerror(tmp_errno));
 		exit(tmp_errno);
 	}
 
@@ -189,10 +187,8 @@ void remove_tmpdir(const char *f)
 		case FTS_F:
 		case FTS_SL:
 		case FTS_SLNONE:
-			if (remove(file->fts_path) != 0) {
-				fprintf(stderr, "%s: '%s' %s\n",
-					prog_name, file->fts_path, strerror(errno));
-			}
+			if (remove(file->fts_path) != 0)
+				mpkg_warn("'%s' %s\n", file->fts_path, strerror(errno));
 			break;
 		}
 	}

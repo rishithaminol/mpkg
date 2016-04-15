@@ -19,6 +19,7 @@
 #include "info.h"
 #include "sqlfrms.h"
 #include "v_compare.h"	/* pkg_dep structure */
+#include "mpkg_err.h"
 
 int get_pkgID(sqlite3 *db, const char *str);
 
@@ -45,7 +46,7 @@ char *archive_name(sqlite3 *db, const char *name)
 		name);
 
 	if (sqlite3_prepare_v2(db, sql_1, -1, &res_1, 0) != SQLITE_OK) {
-		fprintf(stderr, "can't retraive 1 data: %s\n", sqlite3_errmsg(db));
+		mpkg_err("can't retraive 1 data: %s\n", sqlite3_errmsg(db));
 		return NULL;
 	}
 
@@ -66,7 +67,7 @@ char *archive_name(sqlite3 *db, const char *name)
 		OS_CODENAME, pkgBranch, SYS_ARCH, pkgID);
 
 	if (sqlite3_prepare_v2(db, sql_2, -1, &res_2, 0) != SQLITE_OK) {
-		fprintf(stderr, "can't retraive 2 data: %s\n", sqlite3_errmsg(db));
+		mpkg_err("can't retraive 2 data: %s\n", sqlite3_errmsg(db));
 		return NULL;
 	}
 
@@ -97,7 +98,7 @@ int get_pkgID(sqlite3 *db, const char *str)
 		str);
 
 	if (sqlite3_prepare_v2(db, sql_1, -1, &res_1, 0) != SQLITE_OK) {
-		fprintf(stderr, "Can't retraive data: %s\n", sqlite3_errmsg(db));
+		mpkg_err("Can't retraive data: %s\n", sqlite3_errmsg(db));
 		sqlite3_free(sql_1);
 		return -1;
 	}
@@ -105,7 +106,7 @@ int get_pkgID(sqlite3 *db, const char *str)
 	if (sqlite3_step(res_1) == SQLITE_ROW) {
 		pkg_id = sqlite3_column_int(res_1, 0);
 	} else {
-		fprintf(stderr, "Sorry, we don't know what '%s' is.\n", str);
+		mpkg_err("Sorry, we don't know what '%s' is.\n", str);
 		sqlite3_free(sql_1);
 		sqlite3_finalize(res_1);
 		return -1;
@@ -135,7 +136,7 @@ int is_installed(sqlite3 *db, const char *str)
 		pkg_id);
 
 	if (sqlite3_prepare_v2(db, sql_2, -1, &res_2, 0) != SQLITE_OK) {
-		fprintf(stderr, "Can't retraive 2 data: %s\n", sqlite3_errmsg(db));
+		mpkg_err("can't retraive 2 data: %s\n", sqlite3_errmsg(db));
 		return -1;
 	}
 
@@ -213,7 +214,7 @@ void update_db(sqlite3 *db, info_object *iobj, const char *install_log)
 	/* update the database */
 	int rc = sqlite3_exec(db, sql_final, 0, 0, &sql_err_msg);
 	if (rc != SQLITE_OK) {
-		fprintf(stderr, "%s\n", sql_err_msg);
+		mpkg_warn("%s\n", sql_err_msg);
 		sqlite3_free(sql_err_msg);
 	}
 
@@ -234,7 +235,7 @@ sqlite3 *open_main_db(void)
 
 	if (sqlite3_open(SQLITE_MPKG_DB, &db) != SQLITE_OK) {
 		sqlite3_close(db);
-		printf("Can't open database %s\n", sqlite3_errmsg(db));
+		mpkg_err("can't open database %s\n", sqlite3_errmsg(db));
 		return NULL;
 	}
 

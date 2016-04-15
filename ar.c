@@ -15,6 +15,7 @@
 #include "ar.h"
 #include "mpkg.h"
 #include "utils.h"	/* MAX_READ_BUFF */
+#include "mpkg_err.h"
 
 #ifdef DEBUG___
 #define AR_HDR_PRINT(X)							\
@@ -55,7 +56,7 @@ static struct ar_hdr_ *ar_new_header(const char *header)
 
 	strncpy(fname_part, header, 16);
 	if (strchr(fname_part, '/') == NULL) {	/* header checking */
-		fprintf(stderr, "%s: '%s' bad ar header\n", prog_name, archive);
+		mpkg_err("'%s' bad ar header\n", archive);
 		/* attackers can break the program by inserting invalid
 		 * headers so at this point program should break
 		 */
@@ -109,8 +110,7 @@ static int ar_extract(int fd, struct ar_hdr_ *t, const char *dest)
 	fd2 = open(buff, O_WRONLY|O_CREAT|O_EXCL, t->ar_mode);
 	_error = errno;
 	if (fd2 == -1) {
-		fprintf(stderr, "%s: '%s' %s\n", 
-			prog_name, t->ar_name, strerror(_error));
+		mpkg_err("'%s' %s\n", t->ar_name, strerror(_error));
 		return EXIT_FAILURE;
 	}
 
@@ -252,7 +252,7 @@ static int ar_free(struct ar_hdr_ *z)
 	struct ar_hdr_ *t, *h = z;
 
 	if (z == NULL) {
-		fprintf(stderr, "%s: '%s' bad value\n", prog_name, __func__);
+		mpkg_err("Unable to free up internal structure\n");
 		return -1;
 	}
 
@@ -284,7 +284,7 @@ ar_object *ar_open(const char *file)
 
 	/* check archive format */
 	if (ar_test(fd) == -1) {
-		fprintf(stderr, "%s: '%s' bad archive\n", prog_name, archive);
+		mpkg_err("'%s' bad archive\n", archive);
 		close(fd);
 		return NULL;
 	}
@@ -300,7 +300,7 @@ ar_object *ar_open(const char *file)
 int ar_close(ar_object *obj)
 {
 	if (obj == NULL) {
-		fprintf(stderr, "%s: '%s' bad value\n", prog_name, __func__);
+		mpkg_err("unable to close ar_object\n");
 		return -1;
 	}
 

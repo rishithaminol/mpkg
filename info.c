@@ -18,6 +18,7 @@
 #include "utils.h"
 #include "ar.h"
 #include "info.h"
+#include "mpkg_err.h"
 
 /*! @brief infomation object */
 typedef struct info_object {
@@ -86,7 +87,7 @@ static pkg_fld_name info_fld_name(const char *key)
 			return (pkg_fld_name)i;
 
 	/* after the for loop raise warnings */
-	fprintf(stderr, "%s: '%s' unrecognized field name\n", prog_name, key);
+	mpkg_warn("'%s' unrecognized field name\n", key);
 
 	/* not a mav field. */
 	return fld_NULL;
@@ -229,8 +230,8 @@ struct info_field *info_get_fld(const info_object *iobj, pkg_fld_name name)
 		t1 = t1->next;
 	}
 
-	fprintf(stderr, "%s: '%s' is not in info object\n",
-		prog_name, fld_map[name].str);
+	/* if requested field name not in the iobj */
+	mpkg_err("'%s' is not in info object\n", fld_map[name].str);
 
 	return NULL;
 }

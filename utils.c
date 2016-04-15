@@ -9,6 +9,7 @@
 
 #include "mpkg.h"
 #include "utils.h"
+#include "mpkg_err.h"
 
 char p_app[65536];	/* path append string */
 
@@ -47,7 +48,7 @@ int regcomp_e_(regex_t *preg, const char *expr)
 
 	if (regc_ret != 0) {
 		regerror(regc_ret, preg, errbuf, 256);
-		fprintf(stderr, "%s: %s\n", prog_name, errbuf);
+		mpkg_err("%s\n", errbuf);
 		return EXIT_FAILURE;
 	}
 
@@ -74,7 +75,7 @@ int regexec_(const regex_t *preg, const char *string,
 
 	regex_ret = regexec(preg, string, nmatch, pmatch, 0);
 	if (regex_ret != 0) {
-		fprintf(stderr, "%s: '%s' no match\n", prog_name, string);
+		mpkg_err("string '%s' doesn't match\n", string);
 		return REG_NOMATCH;
 	}
 
