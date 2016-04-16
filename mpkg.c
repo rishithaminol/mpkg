@@ -28,10 +28,12 @@ char *prog_name = NULL;	/*!< @brief Program name. */
 char *archive = NULL;	/*!< @brief Archive path currently in use */
 
 /* flag variables */
-int iflag, rflag = 1;
+int iflag = 0;
+int pflag, rflag = 1;
 static int infoflag = 0;
 static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
+	{"install",     no_argument,        &iflag,         'i'},
 	{"package",		required_argument,	NULL,			'p'},
 	{"root",		required_argument,	NULL,			'r'},
 	{"keep-temp",	no_argument,		&clean_temps,	  0},
@@ -86,10 +88,10 @@ int main(int argc, char *argv[])
 
 	opterr = 0; /* no getopt_long() error reports */
 
-	while ((c = getopt_long(argc, argv, "p:r:hV", longopts, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "p:r:hVi", longopts, NULL)) != -1) {
 		switch (c) {
 		case 'p':
-			iflag = 0;
+			pflag = 0;
 			archive = optarg;
 			break;
 		case 'r':
@@ -158,6 +160,9 @@ int main(int argc, char *argv[])
 		goto wind_up;
 	}
 
+	if (iflag != 'i') /* skip without installation */
+		goto wind_up;
+
 	ar_extract_all(ar1, TMP_DIR);	/* extract all files to TMP_DIR */
 	tar_extract(path_append(TMP_DIR, "control.tar.gz"), TMP_CONFIG_DIR);
 	tar_extract(path_append(TMP_DIR, "data.tar.gz"), TMP_DATA_DIR);
@@ -217,7 +222,8 @@ void mpkg_usage(int exit_status)
 	printf(
 		"Usage: %s [OPTIONS] [PACKAGE NAME]\n\n" \
 		"Options\n" \
-		" -p, --package              install given package\n" \
+		" -p, --package              point package path\n" \
+		" -i, --install              install given package\n" \
 		" -r, --root                 prefix\n" \
 		"     --keep-temp            keep temp files\n" \
 		"     --info [COMMANDS, ...] print package infomation. COMMANDS are as follows.\n" \
