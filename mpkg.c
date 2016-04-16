@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 
 	/* if root is given */
 	ret = file_exist(prefix);
-	if (rflag && (ret != 0)) {
+	if ((rflag == 0) && (ret != 0)) {
 		mpkg_err("'%s' %s\n", prefix, strerror(ret));
 		exit(EXIT_FAILURE);
 	}
