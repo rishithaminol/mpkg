@@ -217,11 +217,14 @@ void mpkg_usage(int exit_status)
 	printf(
 		"Usage: %s [OPTIONS] [PACKAGE NAME]\n\n" \
 		"Options\n" \
-		" -p, --package    install given package\n" \
-		" -r, --root       prefix\n" \
-		"     --keep-temp  keep temp files\n" \
-		"     --info       print package infomation.\n" \
-		" -h, --help       help message\n", prog_name);
+		" -p, --package              install given package\n" \
+		" -r, --root                 prefix\n" \
+		"     --keep-temp            keep temp files\n" \
+		"     --info [COMMANDS, ...] print package infomation. COMMANDS are as follows.\n" \
+		"                            all, package, maintainer, architecture, version,\n" \
+		"                            dependancies, homepage, release, description,\n" \
+		"                            installed-size\n" \
+		" -h, --help                 help message\n", prog_name);
 
 	exit(exit_status);
 }
