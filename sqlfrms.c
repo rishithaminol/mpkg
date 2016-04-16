@@ -247,5 +247,6 @@ sqlite3 *open_main_db(void)
  */
 void close_main_db(sqlite3 *db)
 {
-	sqlite3_close(db);
+	if (db != NULL)
+		sqlite3_close(db);
 }
