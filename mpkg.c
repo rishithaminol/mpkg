@@ -154,7 +154,6 @@ int main(int argc, char *argv[])
 	info = info_load(temp_str);
 
 	if (infoflag > 0) {	/* if '--info' used */
-		printf("info details\n");
 		info_print(info, argv[infoflag]);
 		goto wind_up;
 	}
@@ -170,6 +169,7 @@ int main(int argc, char *argv[])
 	int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str),
 		O_WRONLY|O_CREAT|O_EXCL, S_IRUSR|S_IWUSR);
 	copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log);
+	close(fd);
 
 	/* Database update section */
 	db = open_main_db();
@@ -182,7 +182,6 @@ wind_up:
 	info_unload(info);
 	db ? close_main_db(db) : FALSE;
 	clean_temps ? remove_tmpdir(TMP_DIR) : FALSE;
-	fd ? close(fd) : FALSE;
 
 	return 0;
 }

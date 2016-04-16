@@ -249,12 +249,19 @@ void info_print(const info_object *info , const char *commands)
 	s3 = s1;
 
 	while ((s2 = strsep(&s3, ",")) != NULL) {
-		name = info_fld_name(s2);
+		if (strcmp(s2, "all") == 0) { /* set this loop to print everything */
+			free(s1);
+			s1 = strdup("package,maintainer,architecture,version,"
+				"dependancies,homepage,release,description,installed-size");
+			s3 = s1;
+			continue;
+		}
 
+		name = info_fld_name(s2);
 		if (name == fld_NULL)
 			break;
 
-		fld = info_get_fld(info, info_fld_name(s2));
+		fld = info_get_fld(info, name);
 		if (fld->fld_type == fld_type_str)
 			printf("%s: %s\n", s2, fld->str);
 	}
