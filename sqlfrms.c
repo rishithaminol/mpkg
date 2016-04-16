@@ -19,7 +19,6 @@
 #include "info.h"
 #include "sqlfrms.h"
 #include "v_compare.h"	/* pkg_dep structure */
-#include "mpkg_err.h"
 
 int get_pkgID(sqlite3 *db, const char *str);
 
@@ -98,7 +97,7 @@ int get_pkgID(sqlite3 *db, const char *str)
 		str);
 
 	if (sqlite3_prepare_v2(db, sql_1, -1, &res_1, 0) != SQLITE_OK) {
-		mpkg_err("Can't retraive data: %s\n", sqlite3_errmsg(db));
+		mpkg_err("can't retraive data %s\n", sqlite3_errmsg(db));
 		sqlite3_free(sql_1);
 		return -1;
 	}

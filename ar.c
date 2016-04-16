@@ -15,7 +15,6 @@
 #include "ar.h"
 #include "mpkg.h"
 #include "utils.h"	/* MAX_READ_BUFF */
-#include "mpkg_err.h"
 
 #ifdef DEBUG___
 #define AR_HDR_PRINT(X)							\

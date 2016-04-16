@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <regex.h>
+#include "mpkg_err.h"
 
 #ifndef TRUE
 #define TRUE (1 == 1)

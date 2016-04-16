@@ -17,7 +17,6 @@
 #include "info.h"
 #include "sqlfrms.h"
 #include "version.h"
-#include "mpkg_err.h"
 
 char temp_str[4096];
 

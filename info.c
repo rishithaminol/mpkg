@@ -18,7 +18,6 @@
 #include "utils.h"
 #include "ar.h"
 #include "info.h"
-#include "mpkg_err.h"
 
 /*! @brief infomation object */
 typedef struct info_object {

@@ -9,7 +9,6 @@
 
 #include "mpkg.h"
 #include "utils.h"
-#include "mpkg_err.h"
 
 char p_app[65536];	/* path append string */
 

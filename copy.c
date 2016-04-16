@@ -17,7 +17,6 @@
 
 #include "copy.h"
 #include "utils.h"
-#include "mpkg_err.h"
 
 /* global in_list (inode list)
  * this is only for "copy.o"
