@@ -10,11 +10,21 @@ fi
 
 mkdir "root" "root2"
 
-"$MPKG" -i "files/ncurses-5.9-1.0.1.amd64.mav" -r root || {
+"$MPKG" -i -p "files/ncurses-5.9-1.0.1.amd64.mav" -r root || {
 	echo "$PROG_NAME: $MPKG makes some errors. return value = $?"
 	exit 1
 }
 /bin/tar -xf files/data.tar.gz -C root2
+
+find_hardlinks()
+{
+	find "$1" -type f -printf '%n %p\n' | awk '$1 > 1{$1="";print}'
+}
+
+find_symlinks()
+{
+	find -L "$1" -xtype l
+}
 
 # Check hardlink creation
 hlink_creation="OK"
@@ -26,7 +36,7 @@ while read x; do
 		echo "$x $MPKG Hardlink creation was failed"
 		hlink_creation="FAIL"
 	fi
-done <<< "$(./find_hardlinks.sh root)"
+done <<< "$(find_hardlinks root)"
 echo "Hardlink creation: $hlink_creation"
 
 # Check symlink creation
@@ -39,5 +49,5 @@ while read x; do
 		echo "$x $MPKG Symlink creation was failed"
 		symlink_creation="FAIL"
 	fi
-done <<< "$(./find_symlinks.sh root)"
+done <<< "$(find_symlinks root)"
 echo "Symlink creation: $symlink_creation"
