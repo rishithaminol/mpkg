@@ -106,6 +106,9 @@ int main(int argc, char *argv[])
 			mpkg_version();
 			exit(EXIT_SUCCESS);
 			break;
+		case 'i':
+			iflag = 'i';
+			break;
 		case ':':
 			mpkg_err("option '%s' requires an argument\n", argv[optind - 1]);
 			exit(EXIT_FAILURE);
@@ -180,12 +183,12 @@ int main(int argc, char *argv[])
 	db = open_main_db();
 	update_db(db, info, path_append(ADMINISTRATIVE_DIR,
 		(info_get_fld(info, fld_pkg))->str));
+	close_main_db(db);
 
 	/* after copying there sould be post installation function handle */
 wind_up:
 	ar_close(ar1);
 	info_unload(info);
-	db ? close_main_db(db) : FALSE;
 	clean_temps ? remove_tmpdir(TMP_DIR) : FALSE;
 
 	return 0;
