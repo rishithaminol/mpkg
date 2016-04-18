@@ -29,7 +29,7 @@ char *archive = NULL;	/*!< @brief Archive path currently in use */
 
 /* flag variables */
 int iflag = 0;
-int pflag, rflag = 1;
+int pflag, rflag = 0;
 static int infoflag = 0;
 static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
@@ -95,8 +95,7 @@ int main(int argc, char *argv[])
 			archive = optarg;
 			break;
 		case 'r':
-			rflag = 0;
-			/*prefix = optarg;*/
+			rflag = 1;
 			strcpy(prefix, optarg);
 			break;
 		case 'h':
@@ -127,15 +126,15 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	/* if root is not given */
-	if (rflag)
-		strcpy(prefix, "/");
-
 	/* if root is given */
-	ret = file_exist(prefix);
-	if ((rflag == 0) && (ret != 0)) {
-		mpkg_err("'%s' %s\n", prefix, strerror(ret));
-		exit(EXIT_FAILURE);
+	if (rflag) { /* check the existance */
+		ret = file_exist(prefix);
+		if (ret != 0) {
+			mpkg_err("'%s' %s\n", prefix, strerror(ret));
+			exit(EXIT_FAILURE);
+		}
+	} else {
+		strcpy(prefix, "/");
 	}
 
 #ifdef DEBUG___
@@ -152,38 +151,34 @@ int main(int argc, char *argv[])
 	prepare_tempds();
 
 	/* if archive open fail 'goto wind_up' */
-	ar1 = ar_open(archive);
-	if (ar1 == NULL)
+	if ((ar1 = ar_open(archive)) == NULL)
 		goto wind_up;
 	ar_grab(ar1, "info", _get_info);
 	info = info_load(temp_str);
 
-	if (infoflag > 0) {	/* if '--info' used */
+	if (infoflag > 0)	/* if '--info' used */
 		info_print(info, argv[infoflag]);
-		goto wind_up;
-	}
 
-	if (iflag != 'i') /* skip without installation */
-		goto wind_up;
-
-	ar_extract_all(ar1, TMP_DIR);	/* extract all files to TMP_DIR */
-	tar_extract(path_append(TMP_DIR, "control.tar.gz"), TMP_CONFIG_DIR);
-	tar_extract(path_append(TMP_DIR, "data.tar.gz"), TMP_DATA_DIR);
+	if (iflag) { /* skip without installation */
+		ar_extract_all(ar1, TMP_DIR);	/* extract all files to TMP_DIR */
+		tar_extract(path_append(TMP_DIR, "control.tar.gz"), TMP_CONFIG_DIR);
+		tar_extract(path_append(TMP_DIR, "data.tar.gz"), TMP_DATA_DIR);
 	/* there should be control directory handlers */
 	/* after extraction there sould be pre install function handle */
 
 	/* file copying to the prefix */
 	/* copy log */
-	int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str),
-		O_WRONLY|O_CREAT|O_EXCL, S_IRUSR|S_IWUSR);
-	copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log);
-	close(fd);
+		int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str),
+			O_WRONLY|O_CREAT|O_EXCL, S_IRUSR|S_IWUSR);
+		copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log);
+		close(fd);
 
 	/* Database update section */
-	db = open_main_db();
-	update_db(db, info, path_append(ADMINISTRATIVE_DIR,
-		(info_get_fld(info, fld_pkg))->str));
-	close_main_db(db);
+		db = open_main_db();
+		update_db(db, info, path_append(ADMINISTRATIVE_DIR,
+			(info_get_fld(info, fld_pkg))->str));
+		close_main_db(db);
+	}
 
 	/* after copying there sould be post installation function handle */
 wind_up:
