@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>603</x>
+      <x>585</x>
       <y>225</y>
       <w>252</w>
       <h>279</h>
@@ -34,7 +34,7 @@ fg=black</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>270</x>
+      <x>252</x>
       <y>99</y>
       <w>270</w>
       <h>162</h>
@@ -56,7 +56,7 @@ Managed by OS maintainers.</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>603</x>
+      <x>585</x>
       <y>0</y>
       <w>252</w>
       <h>207</h>
@@ -80,7 +80,7 @@ current 'OScodename_&lt;&lt;branch&gt;&gt;'.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>531</x>
+      <x>513</x>
       <y>36</y>
       <w>90</w>
       <h>108</h>
@@ -91,7 +91,7 @@ current 'OScodename_&lt;&lt;branch&gt;&gt;'.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>531</x>
+      <x>513</x>
       <y>117</y>
       <w>90</w>
       <h>171</h>
@@ -102,7 +102,7 @@ current 'OScodename_&lt;&lt;branch&gt;&gt;'.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>891</x>
+      <x>873</x>
       <y>387</y>
       <w>90</w>
       <h>36</h>
@@ -114,7 +114,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>846</x>
+      <x>828</x>
       <y>396</y>
       <w>63</w>
       <h>36</h>
@@ -125,7 +125,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>891</x>
+      <x>873</x>
       <y>126</y>
       <w>90</w>
       <h>45</h>
@@ -137,7 +137,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>846</x>
+      <x>828</x>
       <y>126</y>
       <w>63</w>
       <h>36</h>
@@ -148,7 +148,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>135</x>
+      <x>117</x>
       <y>180</y>
       <w>90</w>
       <h>45</h>
@@ -160,7 +160,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>216</x>
+      <x>198</x>
       <y>180</y>
       <w>72</w>
       <h>36</h>
@@ -171,7 +171,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>459</x>
+      <x>441</x>
       <y>576</y>
       <w>126</w>
       <h>90</h>
@@ -188,7 +188,7 @@ group=2</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>495</x>
+      <x>477</x>
       <y>693</y>
       <w>324</w>
       <h>99</h>
@@ -207,7 +207,7 @@ group=2</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>441</x>
+      <x>423</x>
       <y>531</y>
       <w>396</w>
       <h>279</h>
@@ -222,7 +222,7 @@ group=2</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>27</x>
+      <x>9</x>
       <y>567</y>
       <w>180</w>
       <h>45</h>
@@ -235,7 +235,7 @@ bg=green</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>198</x>
+      <x>180</x>
       <y>585</y>
       <w>261</w>
       <h>27</h>
@@ -246,7 +246,7 @@ bg=green</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>45</x>
+      <x>27</x>
       <y>306</y>
       <w>126</w>
       <h>90</h>
@@ -263,7 +263,7 @@ group=3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>81</x>
+      <x>63</x>
       <y>423</y>
       <w>324</w>
       <h>99</h>
@@ -282,7 +282,7 @@ group=3</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>27</x>
+      <x>9</x>
       <y>261</y>
       <w>396</w>
       <h>279</h>
@@ -297,7 +297,7 @@ group=3</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>63</x>
+      <x>45</x>
       <y>108</y>
       <w>117</w>
       <h>54</h>
@@ -309,7 +309,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>171</x>
+      <x>153</x>
       <y>126</y>
       <w>117</w>
       <h>63</h>
@@ -320,7 +320,7 @@ style=wordwrap</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>54</x>
+      <x>36</x>
       <y>657</y>
       <w>252</w>
       <h>63</h>
@@ -333,7 +333,7 @@ name-version-release.arch.mav</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>36</x>
+      <x>18</x>
       <y>756</y>
       <w>324</w>
       <h>135</h>
@@ -343,7 +343,8 @@ name-version-release.arch.mav</panel_attributes>
 /var/lib/mpkg/&lt;&lt;OS_codename&gt;&gt;_core
 /var/lib/mpkg/&lt;&lt;OS_codename&gt;&gt;_testing
 /var/lib/mpkg/&lt;&lt;OS_codename&gt;&gt;_extra
-/var/lib/mpkg/install-logs
+/var/lib/mpkg/copy-logs
+/var/log/mpkg.log
 bg=pink</panel_attributes>
     <additional_attributes/>
   </element>
