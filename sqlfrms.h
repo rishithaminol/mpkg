@@ -5,7 +5,6 @@
 #include "utils.h"
 
 #ifndef SQLITE_CUSTOM_DATABASE
-#define SQLITE_CUSTOM_DATABASE
 #define MPKG_SQLITE_DB_DIR "/var/lib/mpkg"
 #endif
 #define SQLITE_MPKG_DB path_append(MPKG_SQLITE_DB_DIR, "mpkg.db")
