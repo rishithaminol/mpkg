@@ -10,6 +10,8 @@
 #include <sqlite3.h>
 #include <unistd.h>
 
+#include <config.h>
+
 #include "mpkg.h"
 #include "utils.h"
 #include "copy.h"
@@ -28,8 +30,8 @@ char *prog_name = NULL;	/*!< @brief Program name. */
 char *archive = NULL;	/*!< @brief Archive path currently in use */
 
 /* flag variables */
-int iflag = 0;
-int pflag, rflag = 0;
+static int iflag = 0;
+static int pflag, rflag = 0;
 static int infoflag = 0;
 static int clean_temps = 1;	/*!< @brief temporary directory deletion flag */
 struct option longopts[] = {
@@ -64,7 +66,7 @@ static void _get_info(char *str, int n)
 }
 
 /*! @brief used by copy() */
-static void copy_log(void *fd, char *fpath)
+static void copy_log_(void *fd, char *fpath)
 {
 	char t[256];
 	sprintf(t, "%s\n", fpath);
@@ -170,7 +172,7 @@ int main(int argc, char *argv[])
 	/* copy log */
 		int fd = open(path_append(ADMINISTRATIVE_DIR, (info_get_fld(info, fld_pkg))->str),
 			O_WRONLY|O_CREAT|O_EXCL, S_IRUSR|S_IWUSR);
-		copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log);
+		copy(TMP_DATA_DIR, prefix, (void *)&fd, copy_log_);
 		close(fd);
 
 	/* Database update section */

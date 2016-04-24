@@ -2,9 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../ar.h"
-#include "../info.h"
-#include "../v_compare.h"
+#include "../src/ar.h"
+#include "../src/info.h"
+#include "../src/v_compare.h"
 
 char *prog_name = NULL; // needed by ar.c
 char *archive = NULL; // needed by ar.c

@@ -3,11 +3,9 @@
  */
 #include <stdio.h>
 
-#ifndef VERSION
-#define VERSION "ongoing"
-#endif
+#include <config.h>
 
 void mpkg_version(void)
 {
-	printf("%s\n", VERSION);
+	printf("%s\n", PACKAGE_VERSION);
 }

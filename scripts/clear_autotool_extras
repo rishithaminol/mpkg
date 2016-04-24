@@ -1,0 +1,10 @@
+#!/bin/bash
+
+find . -name "Makefile.in" -o -name "Makefile" -o -name "aclocal.m4" -print
+		# -o -name "app.info" -o -name "compile" -o -name "config.h" \
+		# -o -name "config.h.in" -o -name "config.log" \
+		# -o -name "config.status" -o -name "configure" \
+		# -o -name "configure.scan" -o -name "coverage_report" \
+		# -o -name "depcomp" -o -name "install-sh" -o -name "libtool" \
+		# -o -name "m4" -o -name "missing" -o -name "stamp-h1" \
+		# -o -name "*~" -print

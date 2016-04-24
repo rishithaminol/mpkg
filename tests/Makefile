@@ -8,16 +8,16 @@ info_test: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) info_test.c -o info_test
 
 ar.o:
-	$(CC) $(CFLAGS) -c ../ar.c
+	$(CC) $(CFLAGS) -c ../src/ar.c
 
 info.o:
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -c ../info.c
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -c ../src/info.c
 
 utils.o:
-	$(CC) $(CFLAGS) -c ../utils.c
+	$(CC) $(CFLAGS) -c ../src/utils.c
 
 v_compare.o:
-	$(CC) $(CFLAGS) -c ../v_compare.c
+	$(CC) $(CFLAGS) -c ../src/v_compare.c
 
 clean:
 	../scripts/del_executables.sh .

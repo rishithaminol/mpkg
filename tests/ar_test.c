@@ -1,8 +1,8 @@
 /* gcc -Wall -g -DDEBUG___ ../ar.c ar.c -o ar_test */
 #include <stdio.h>
 
-#include "../ar.h"
-#include "../utils.h"
+#include "../src/ar.h"
+#include "../src/utils.h"
 
 char *prog_name = NULL;
 char *archive = NULL;
