@@ -7,12 +7,26 @@ use this tool to manage packages under an LFS system. Currently this
 program is in development.
 
 ### How do I get start? ###
-This program is currently in development and still this program does not
-have a proper build system. If someone needs to test this program. Type.
+To generate gnu autotools, type.
+```
+autoreconf -iv
+```
+And then prepare for the compiling and compile the package.
+```
+./configure
+make
+```
 
-```
-make mpkg
-```
+If some one needs to enable debugging features use `--enable-debug` option
+for the `./configure`.
+
+The compiled executable `mpkg` will be awailable in src/bin.
+Still it does not have custom database location changer and custom install
+log disabling feature. So the database locations will be `/var/lib/mpkg/mpkg.db`
+and install logs will be in `/var/lib/mpkg/copy-logs` directory.
+
+please do not install this program because this program is still
+in development stage.
 All other documentation can be obtained from doc/ directory.
 
 ### Contribution guidelines ###
