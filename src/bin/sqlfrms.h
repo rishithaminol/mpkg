@@ -2,10 +2,11 @@
 #define SQLFRMS_H
 
 #include <sqlite3.h>
+#include "mpkg.h"	/* ADMINISTRATIVE_DIR */
 #include "utils.h"
 
 #ifndef SQLITE_CUSTOM_DATABASE
-#define MPKG_SQLITE_DB_DIR "/var/lib/mpkg"
+#define MPKG_SQLITE_DB_DIR ADMINISTRATIVE_DIR
 #endif
 #define SQLITE_MPKG_DB path_append(MPKG_SQLITE_DB_DIR, "mpkg.db")
 #define SQLITE_MPKG_ALL_PKGS_DB path_append(MPKG_SQLITE_DB_DIR, "all_pkgs.db")
