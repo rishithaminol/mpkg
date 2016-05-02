@@ -9,9 +9,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-/* globals */
-#include "mpkg.h"
-
 /* inode number handling table */
 #include "in_list.h"
 

@@ -3,7 +3,7 @@
  */
 #include <stdio.h>
 
-#include <config.h>
+#include "main.h"
 
 void mpkg_version(void)
 {

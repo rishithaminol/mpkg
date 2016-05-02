@@ -7,7 +7,6 @@
 #include <regex.h>
 #include <string.h>
 
-#include "mpkg.h"
 #include "utils.h"
 
 char p_app[65536];	/* path append string */

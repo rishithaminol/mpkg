@@ -12,8 +12,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include "main.h"	/* archive, prefix, prog_name */
 #include "ar.h"
-#include "mpkg.h"
 #include "utils.h"	/* MAX_READ_BUFF */
 
 #ifdef DEBUG___

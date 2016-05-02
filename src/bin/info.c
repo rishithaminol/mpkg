@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <regex.h>
 
-#include "mpkg.h"
 #include "utils.h"
 #include "ar.h"
 #include "info.h"

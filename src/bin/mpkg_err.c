@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "mpkg.h"
+#include "main.h"
 #include "mpkg_err.h"
 
 #ifdef DEBUG___
